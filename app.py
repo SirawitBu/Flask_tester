@@ -78,7 +78,7 @@ def home():
         cAlp=len(message)
         cAlpNoSp=len(message)-message.count(' ')
         cPar=message.count('\n')+1
-    return render_template('base.html',form=form,message=message,wTag=wTag,tTag=tTag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,check=check,cPar=cPar)
+    return render_template('base.html',form=form,message=message,wTag=wTag,tTag=tTag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
 
 
 @app.route('/duplicate')
