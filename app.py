@@ -16,6 +16,9 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configured')
 
+class myForm(FlaskForm):
+    message= TextAreaField("Input message",render_kw={'style':'width: 800px;height:250px; overflow: auto; ' }) 
+    submit= SubmitField("Send")
 
 ###
 # Routing for your application.
