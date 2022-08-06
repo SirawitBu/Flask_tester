@@ -29,10 +29,6 @@ def home():
     """Render website's home page."""
     return render_template('base.html')
 
-@app.route('/base')
-def base():
-    """Render website's home page."""
-    return render_template('base.html')
 
 @app.route('/duplicate')
 def about():
