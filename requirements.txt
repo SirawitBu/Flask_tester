@@ -16,7 +16,7 @@ tqdm==4.64.0
 Werkzeug==2.1.2
 WTForms==3.0.1
 spacy
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.0.0/en_core_web_sm-2.0.0.tar.gz
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.0/en_core_web_sm-3.4.0.tar.gz
 
 # ----------------------
 # Testing
