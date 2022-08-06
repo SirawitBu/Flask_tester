@@ -72,7 +72,7 @@ def home():
 #         นับประโยค
         cSent=message.count(".")
         if wTag != False:
-            nTag=len(tag)      
+            nTag=len(wTag)      
         if kWord != False:
             nkWord=len(kWord)
         cAlp=len(message)
