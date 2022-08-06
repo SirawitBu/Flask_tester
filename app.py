@@ -24,10 +24,42 @@ class myForm(FlaskForm):
 # Routing for your application.
 ###
 
-@app.route('/')
+@app.route('/',methods=["GET","POST"])
 def home():
     """Render website's home page."""
-    return render_template('base.html')
+    message = False
+    allWord = False
+    tag = False
+    nTag = False
+    kWord = False
+    nkWord = False
+    vWord = False
+    cWord = False
+    cSent = False
+    cAlp = False
+    cAlpNoSp = False
+    cPar = False
+    check = False
+    form=myForm()
+    if form.validate_on_submit():
+        message=form.message.data
+        form.message.data=""
+        from textblob import TextBlob
+        blob=TextBlob(message)
+        allWord=blob.words
+        tag=(blob.tags)
+        if tag != False:
+            nTag=len(tag)      
+        kWord=list((blob.word_counts).keys())
+        if kWord != False:
+            nkWord=len(kWord)
+        vWord=list((blob.word_counts).values())
+        cWord=len(blob.split())
+        cSent=len(blob.sentences)
+        cAlp=len(message)
+        cAlpNoSp=len(message)-message.count(' ')
+        cPar=message.count('\n')+1
+    return render_template('base.html',form=form,message=message,allWord=allWord,tag=tag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,check=check,cPar=cPar)
 
 
 @app.route('/duplicate')
