@@ -31,7 +31,7 @@ def home():
 
 
 @app.route('/duplicate')
-def about():
+def duplicate():
     """Render the website's about page."""
     return render_template('duplicate.html')
 
