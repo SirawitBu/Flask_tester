@@ -10,7 +10,9 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
-
+from textblob import TextBlob
+nltk.download("punkt")
+nltk.download("brown")
 
 app = Flask(__name__)
 
@@ -44,7 +46,6 @@ def home():
     if form.validate_on_submit():
         message=form.message.data
         form.message.data=""
-        from textblob import TextBlob
         blob=TextBlob(message)
         allWord=blob.words
         tag=(blob.tags)
