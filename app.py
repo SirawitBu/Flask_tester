@@ -71,7 +71,7 @@ def home():
         cWord=len(message.split())
 #         นับประโยค
         cSent=message.count(".")
-        if wtag != False:
+        if wTag != False:
             nTag=len(tag)      
         if kWord != False:
             nkWord=len(kWord)
