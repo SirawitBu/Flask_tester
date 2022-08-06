@@ -36,6 +36,10 @@ def home():
     vWord= False
     nkWord= False
     cWord= False
+    cSent= False
+    cAlp = False
+    cAlpNoSp = False
+    cPar = False
     form=myForm()
     if form.validate_on_submit():
         message=form.message.data
