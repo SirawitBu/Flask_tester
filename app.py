@@ -11,8 +11,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
 from textblob import TextBlob
-nltk.download("punkt")
-nltk.download("brown")
 
 app = Flask(__name__)
 
