@@ -29,8 +29,8 @@ def home():
     """Render website's home page."""
     sp = spacy.load('en_core_web_sm')
     message = False
-    wTag = []
-    tTag = []
+    wTag = False
+    tTag = False
     nTag = False
     kWord= False
     vWord= False
@@ -48,6 +48,8 @@ def home():
         words = [x.strip(".,()'") for x in message.split()]
         words = " ".join(words)
         words = sp(words)
+        wTag = []
+        tTag = []
         for i in words:
             wTag.append(i)
             tTag.append(spacy.explain(i.pos_))
