@@ -52,6 +52,59 @@
     </nav>
 
   This is Count mode
+  <div>
+    <form action="/" method="post">
+      {{form.hidden_tag()}}
+      {{form.message.label}}
+      <br>
+      {{form.message()}}
+      <br>
+      {{form.submit()}}
+    </form>
+  </div>
+
+  <hr>
+  <!-- ส่วนแสดงผล -->
+  {% if message %}
+
+  <!-- แสดงข้อความที่รับมา -->
+    <div>       
+      Message = 
+      {% for i in range (0,nTag) %}
+        <span title={{((tag[i])[1])}} style="text-align: center;"><strong>{{((tag[i])[0])}}</strong></span>
+      {% endfor %}
+    </div>
+    <div style="width: 200px; height: 100px; border: 2px solid black; overflow: auto;">
+      {% for i in range (0,nTag) %}
+        <span>{{((tag[i])[0])}}=>{{((tag[i])[1])}}</span>
+        <br>
+      {% endfor %}
+    </div>
+        
+
+    <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
+    <span>frequency of <strong>{{nkWord}}</strong> word</span> 
+    <div style="width: 200px; height: 100px; border: 2px solid black; overflow: auto;">      
+      {% for i in range (0,nkWord) %}
+        <span>{{kWord[i]}} = {{vWord[i]}}</span>
+        <br>
+      {% endfor %}
+    </div>
+    <!-- จำนวนคำทั้งหมด -->
+    <span>Words ={{cWord}}</span>
+    <br>
+    <!-- จำนวนประโยค -->
+    <span>Sentences ={{cSent}}</span>
+    <br>
+    <!-- จำนวนตัวอักษร -->
+    <span>Characters ={{cAlp}}</span>
+    <br>
+    <!-- จำนวนตัวอักษรไม่รวมเว้นวรรค -->
+    <span>Characters(No space) ={{cAlpNoSp}}</span>
+    <br>
+    <span>Paragraph = {{cPar}}</span>
+
+      {% endif %}
 
 
   <!-- JavaScript at the bottom for fast page loading -->
