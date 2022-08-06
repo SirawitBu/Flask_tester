@@ -10,6 +10,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
+import spacy
 
 app = Flask(__name__)
 
@@ -26,31 +27,52 @@ class myForm(FlaskForm):
 @app.route('/',methods=["GET","POST"])
 def home():
     """Render website's home page."""
+    sp = spacy.load('en_core_web_sm')
     message = False
-    allWord = False
-    tag = False
+    wTag = []
+    tTag = []
     nTag = False
-    kWord = False
-    nkWord = False
-    vWord = False
-    cWord = False
-    cSent = False
-    cAlp = False
-    cAlpNoSp = False
-    cPar = False
-    check = False
+    kWord= False
+    vWord= False
+    nkWord= False
+    cWord= False
     form=myForm()
     if form.validate_on_submit():
         message=form.message.data
         form.message.data=""
-        if tag != False:
+#         ประเภทคำ
+        words = [x.strip(".,()'") for x in message.split()]
+        words = " ".join(words)
+        words = sp(words)
+        for i in words:
+            wTag.append(i)
+            tTag.append(spacy.explain(i.pos_))
+        nTag=len(wTag)
+#         คำไม่ซ้ำและความถี่คำ
+        def word_count(str):
+            counts = dict()
+            words = [x.strip(".,()'") for x in str.split()]    
+            for word in words:
+                if word in counts:
+                    counts[word] += 1
+                else:
+                    counts[word] = 1
+            return counts
+        kWord=(word_count(message)).keys()
+        vWord=(word_count(message)).values()
+        nkWord=len(word_count(message))
+#         คำทั้งหมด
+        cWord=len(message.split())
+#         นับประโยค
+        cSent=message.count(".")
+        if wtag != False:
             nTag=len(tag)      
         if kWord != False:
             nkWord=len(kWord)
         cAlp=len(message)
         cAlpNoSp=len(message)-message.count(' ')
         cPar=message.count('\n')+1
-    return render_template('base.html',form=form,message=message,allWord=allWord,tag=tag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,check=check,cPar=cPar)
+    return render_template('base.html',form=form,message=message,wTag=wTag,tTag=tTag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,check=check,cPar=cPar)
 
 
 @app.route('/duplicate')
