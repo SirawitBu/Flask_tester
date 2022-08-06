@@ -27,10 +27,19 @@ class myForm(FlaskForm):
 @app.route('/')
 def home():
     """Render website's home page."""
-    return render_template('home.html')
+    return render_template('base.html')
 
+@app.route('/base')
+def base():
+    """Render website's home page."""
+    return render_template('base.html')
 
-@app.route('/about/')
+@app.route('/duplicate')
+def about():
+    """Render the website's about page."""
+    return render_template('duplicate.html')
+
+@app.route('/about')
 def about():
     """Render the website's about page."""
     return render_template('about.html')
