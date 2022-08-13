@@ -33,83 +33,211 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: black; position: sticky; top: 0; width: 100%;">
-      <a class="navbar-brand" href="#">WORD</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link active">Select Mode></a>
-          <a class="nav-item nav-link active" href="/">Count</a>
-          <a class="nav-item nav-link" href="/duplicate">Duplicate</a>
-          <a class="nav-item nav-link" href="/about">About</a>
-        </div>
+  <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top" style="background-color: black; width: 100%;">
+    <div class="container-fluid" >
+        <button class="btn menu-btn" type="button" style="display:none;" onclick="show_side_menu()" >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      <a class="navbar-brand" href="#">&nbsp;WORD</a>
+      <div class="collapse navbar-collapse "  >
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 menu-top">
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu active" href="#">Select Mode></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu active" href="/">Count</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu" href="/duplicate">Duplicate</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu" href="/about">About</a>
+          </li>
+        </ul>
       </div>
-    </nav>
-
-  <div>
-    <form action="/" method="post">
-      {{form.hidden_tag()}}
-      {{form.message.label}}
-      <br>
-      {{form.message()}}
-      <br>
-      {{form.submit()}}
-    </form>
-  </div>
-
-  <hr>
-  <!-- ส่วนแสดงผล -->
-  {% if message %}
-    <!-- แสดงข้อความที่รับมา -->
-    <div style="width: 500px">       
-      Message = 
-      {% for i in Tag %}
-        <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}}><strong>{{ i }}</strong></span>
-      {% endfor %}
-    </div>     
-
-    <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
-    <span>frequency of <strong>{{nkWord}}</strong> word</span> 
-    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto;">
-      {% for i in fWord %}
-      {% set check = namespace(h_bool=False)%}
-        {% for j in Tag if check.h_bool == false%}
-          {% if j|string == i %}
-            {{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}
-            <br>
-            {% set check.h_bool = true %}
-          {% endif %}
-        {% endfor %}        
-      {% endfor %}
     </div>
+  </nav>
+
+  <div class="d-flex flex-column p-3 text-white bg-dark side-menu " style="width: 280px;height:100vh;position:fixed;left:-280px">
+        
+    <ul class="nav nav-pills flex-column mb-auto pt-5 side_nav_menu">
+
+    </ul>
     
-    <div></div>
-
-    <!-- จำนวนคำทั้งหมด -->
-    <span>Words ={{cWord}}</span>
-    <br>
-    <!-- จำนวนประโยค -->
-    <span>Sentences ={{cSent}}</span>
-    <br>
-    <!-- จำนวนตัวอักษร -->
-    <span>Characters ={{cAlp}}</span>
-    <br>
-    <!-- จำนวนตัวอักษรไม่รวมเว้นวรรค -->
-    <span>Characters(No space) ={{cAlpNoSp}}</span>
-    <br>
-    <span>Paragraph = {{cPar}}</span>
-    <br>
-
-  {% endif %}
-
-
+  </div>
+  <div class=" pt-5 main-content-div" style="padding-left: 15px; margin-top: 10px;">
+    
+    <div>
+      <form action="/" method="post">
+        {{form.hidden_tag()}}
+        {{form.message.label}}
+        <br>
+        {{form.message()}}
+        <br>
+        {{form.submit()}}
+      </form>
+    </div>
+  
+    <hr>
+    <!-- ส่วนแสดงผล -->
+    {% if message %}
+      <!-- แสดงข้อความที่รับมา -->
+      <div style="width: 500px">       
+        Message = 
+        {% for i in Tag %}
+          <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}} style="text-align: center;"><strong>{{ i }}</strong></span>
+        {% endfor %}
+      </div>     
+  
+      <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
+      <span>frequency of <strong>{{nkWord}}</strong> word</span> 
+      <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto;">
+        {% for i in fWord %}
+        {% set check = namespace(h_bool=False)%}
+          {% for j in Tag if check.h_bool == false%}
+            {% if j|string == i %}
+              {{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}
+              <br>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+      </div>
+      
+      <div></div>
+  
+      <!-- จำนวนคำทั้งหมด -->
+      <span>Words ={{cWord}}</span>
+      <br>
+      <!-- จำนวนประโยค -->
+      <span>Sentences ={{cSent}}</span>
+      <br>
+      <!-- จำนวนตัวอักษร -->
+      <span>Characters ={{cAlp}}</span>
+      <br>
+      <!-- จำนวนตัวอักษรไม่รวมเว้นวรรค -->
+      <span>Characters(No space) ={{cAlpNoSp}}</span>
+      <br>
+      <span>Paragraph = {{cPar}}</span>
+      <br>
+  
+    {% endif %}
+    
+  </div>
+  
+  <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
   <script>
-    var text=document.getElementById("mText").value;
-    document.getElementById("message").innerHTML = text;
-  </script>
 
+    function show_side_menu()//function สำหรับแสดง หรือซ่อน side เมนู
+    {
+        let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
+
+        if(left_pos==-280)//ถ้า side เมนูยังไม่แสดง ให้แสดง side เมนู แบบ animation
+        {
+
+            var menu_animation=setInterval(function(){
+
+                left_pos+=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content+=5;
+
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+
+                
+                if(left_pos==0)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        else
+        {   //ถ้า side เมนูยังแสดงอยู่ ให้ซ่อน side เมนู แบบ  animation
+            var menu_animation=setInterval(function(){
+
+                left_pos-=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content-=5;
+                
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+                
+                if(left_pos==-280)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        
+    }
+
+    function responsive()//function กำหนดให้ซ่อนปุ่ม เปิดปิด เมนูข้าง หรือแสดงเมนูบน
+    {
+        if(window.innerWidth <= 768)//หน้าจอน้อยกว่า หรือเท่ากับ 768
+        {
+            document.querySelector(".menu-top").style.display="none";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="";//แสดงปุ่มสำหรับเมนูข้าง
+        }
+        else
+        {
+            document.querySelector(".menu-top").style.display="";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="none";//ซ่อนปุ่มสำหรับเมนูข้าง
+        }
+    }
+    
+    (function(){
+      //-----เมื่อเปิดหน้าเว็บมาเราจะให้ เมนูด้านบน กับ Side เมนูด้านข้างมีเมนูแบบเดียวกัน
+      var top_nav_menu=document.querySelectorAll(".top_nav_menu");
+      var side_menu_html="";
+      top_nav_menu.forEach(element => {
+          side_menu_html+=`<li class="nav-item">
+          <a href="${element.href}" class="nav-link text-white ">
+              ${element.innerHTML}
+          </a>
+        </li>`;
+      });
+      document.querySelector(".side_nav_menu").innerHTML=side_menu_html;
+
+      responsive();
+
+    })();
+    // ถ้าหน้าเว็บมีการเปลี่ยนขนาดให้เรียก function responsive() เพื่อ ดูว่าจะซ่อน หรือ แสดงเมนูบน
+    window.addEventListener("resize", function(){
+
+        responsive();
+        
+    });
+    //หากมีการคลิกที่เนื้อหาเว็บ แต่ Side เมนูเปิดอยู่ ให้ซ่อน Side เมนู
+    document.querySelector("body").addEventListener("click", function(){
+
+        let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
+        if(left_pos==0)
+        {
+            var menu_animation=setInterval(function(){
+
+                left_pos-=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content-=5;
+                
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+                
+                if(left_pos==-280)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        
+    });
+
+  </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
 
@@ -124,5 +252,6 @@
     s.parentNode.insertBefore(g,s)}(document,'script')); 
   </script>
 
+  
 </body>
 </html>
