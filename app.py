@@ -1,12 +1,5 @@
-"""
-Flask Documentation:     http://flask.pocoo.org/docs/
-Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
-Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
-
-This file creates your application.
-"""
-
 import os
+from re import search
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
@@ -16,24 +9,20 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configured')
 
+# Count part
 class myForm(FlaskForm):
     message= TextAreaField("Input message",render_kw={'style':'width: 800px;height:250px; overflow: auto; ' }) 
     submit= SubmitField("Send")
-
-###
-# Routing for your application.
-###
 
 @app.route('/',methods=["GET","POST"])
 def home():
     """Render website's home page."""
     sp = spacy.load('en_core_web_sm')
     message = False
-    wTag = False
-    tTag = False
+    wordSP = False
+    Tag= False
     nTag = False
-    kWord= False
-    vWord= False
+    fWord= False
     nkWord= False
     cWord= False
     cSent= False
@@ -44,17 +33,15 @@ def home():
     if form.validate_on_submit():
         message=form.message.data
         form.message.data=""
-#         ประเภทคำ
+        # ประเภทคำ
+        wordSP=message.split()
         words = [x.strip(".,()'") for x in message.split()]
         words = " ".join(words)
         words = sp(words)
-        wTag = []
-        tTag = []
+        Tag={}
         for i in words:
-            wTag.append(i)
-            tTag.append(spacy.explain(i.pos_))
-        nTag=len(wTag)
-#         คำไม่ซ้ำและความถี่คำ
+            Tag[i]=spacy.explain(i.pos_)
+        # คำไม่ซ้ำและความถี่คำ
         def word_count(str):
             counts = dict()
             words = [x.strip(".,()'") for x in str.split()]    
@@ -64,38 +51,36 @@ def home():
                 else:
                     counts[word] = 1
             return counts
-        kWord=(word_count(message)).keys()
-        vWord=(word_count(message)).values()
+        fWord=(word_count(message))
         nkWord=len(word_count(message))
-#         คำทั้งหมด
+        # คำทั้งหมด
         cWord=len(message.split())
-#         นับประโยค
+        # นับประโยค
         cSent=message.count(".")
-        if wTag != False:
-            nTag=len(wTag)      
-        if kWord != False:
-            nkWord=len(kWord)
+        if Tag != False:
+            nTag=len(Tag)      
+        if fWord != False:
+            nkWord=len(fWord)
         cAlp=len(message)
         cAlpNoSp=len(message)-message.count(' ')
         cPar=message.count('\n')+1
-    return render_template('base.html',form=form,message=message,wTag=wTag,tTag=tTag,nTag=nTag,kWord=kWord,nkWord=nkWord,vWord=vWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
+    return render_template('base.html',form=form,message=message,wordSP=wordSP,Tag=Tag,nTag=nTag,fWord=fWord,nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
 
-
+# Duplicate part
 @app.route('/duplicate')
 def duplicate():
     """Render the website's about page."""
     return render_template('duplicate.html')
 
+# About us part
 @app.route('/about')
 def about():
     """Render the website's about page."""
     return render_template('about.html')
 
 
-###
-# The functions below should be applicable to all Flask apps.
-###
 
+# Fix bugs part
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
     """Send your static text file."""
