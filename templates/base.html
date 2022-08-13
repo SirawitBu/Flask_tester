@@ -10,56 +10,44 @@
   <meta name="author" content="">
   <link rel="shortcut icon" href="/static/favicon.ico">
 
-  <!-- HTML5 shim, for IE 6-8 support of HTML elements -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
 <!-- CSS part  -->
   <style>
-        table,th,td,tr{
-            border: 1px solid black;
-            border-collapse: collapse;
-            text-align=center
-        }
-    </style>
+    .mHover:hover{
+      background-color: rgb(101, 207, 248);
+    } 
+    #mClick:focus {
+      background-color: rgb(101, 207, 248);
+    } 
+    #mClick:focus::after {
+      background-color: rgb(101, 207, 248);
+      content: ' ('attr(title)')';
+    }      
+  </style>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-  <!-- Rather use `less.js` to dynamically compile your `stylesheet/less` files? -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
   <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
-
-  <!-- Need Modernizr? Uncomment the following script. -->
-  <!-- <script src="/static/js/modernizr.js"></script> -->
 
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar navbar-dark" style="background-color: black;"">
-        <a class="navbar-brand" href="#">WORD</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" >Select Mode></a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Count</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/duplicate">Duplicate</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/about">About</a>
-            </li>
-          </ul>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: black; position: sticky; top: 0; width: 100%;">
+      <a class="navbar-brand" href="#">WORD</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active">Select Mode></a>
+          <a class="nav-item nav-link active" href="/">Count</a>
+          <a class="nav-item nav-link" href="/duplicate">Duplicate</a>
+          <a class="nav-item nav-link" href="/about">About</a>
         </div>
+      </div>
     </nav>
 
-  This is Count mode
   <div>
     <form action="/" method="post">
       {{form.hidden_tag()}}
@@ -74,45 +62,31 @@
   <hr>
   <!-- ส่วนแสดงผล -->
   {% if message %}
-
-  <!-- แสดงข้อความที่รับมา -->
+    <!-- แสดงข้อความที่รับมา -->
     <div style="width: 500px">       
       Message = 
-      {% for i in range (0,nTag) %}
-        <span title={{tTag[i]}} style="text-align: center;"><strong>{{wTag[i]}}</strong></span>
+      {% for i in Tag %}
+        <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}} style="text-align: center;"><strong>{{ i }}</strong></span>
       {% endfor %}
-    </div>
-    <div style="width: 250px; height: 100px; border: 2px solid black; overflow: auto;">
-      {% for i in range (0,nTag) %}
-        <span>{{wTag[i]}}=>{{tTag[i]}}</span>
-        <br>
-      {% endfor %}
-    </div>
-        
+    </div>     
 
     <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
     <span>frequency of <strong>{{nkWord}}</strong> word</span> 
-    <div style="width: 500px; height: 80px; border: 2px solid black; overflow: auto;">
-      <table>
-        <th>
-            <th>Word</th>
-        </th> 
-        <th>                                                                              
-        {% for i in kWord %}
-          <td>{{ i }}</td>
-        {% endfor %}
-        </th>                                                                               
-        <tr></tr> 
-        <th>
-            <th>Frequency</th>
-        </th> 
-        <th>                                                                              
-        {% for i in vWord %}
-          <td>{{ i }}</td>
-        {% endfor %}
-        </th>
-      </table>
-    </div>                                                                                      
+    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto;">
+      {% for i in fWord %}
+      {% set check = namespace(h_bool=False)%}
+        {% for j in Tag if check.h_bool == false%}
+          {% if j|string == i %}
+            {{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}
+            <br>
+            {% set check.h_bool = true %}
+          {% endif %}
+        {% endfor %}        
+      {% endfor %}
+    </div>
+    
+    <div></div>
+
     <!-- จำนวนคำทั้งหมด -->
     <span>Words ={{cWord}}</span>
     <br>
@@ -126,8 +100,15 @@
     <span>Characters(No space) ={{cAlpNoSp}}</span>
     <br>
     <span>Paragraph = {{cPar}}</span>
+    <br>
 
-      {% endif %}
+  {% endif %}
+
+
+  <script>
+    var text=document.getElementById("mText").value;
+    document.getElementById("message").innerHTML = text;
+  </script>
 
 
   <!-- JavaScript at the bottom for fast page loading -->
@@ -135,26 +116,13 @@
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="/static/js/libs/jquery.js">\x3C/script>')</script>
-
-
-  <!-- Additional JavaScript libraries and plugins... -->
-  {% block js %}{% endblock %}
-
-
   <!-- mathiasbynens.be/notes/async-analytics-snippet Change UA-XXXXX-X to be your site's ID -->
   <script>
     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-    s.parentNode.insertBefore(g,s)}(document,'script'));
+    s.parentNode.insertBefore(g,s)}(document,'script')); 
   </script>
-
-
-  <!-- Prompt IE < 8 users to install Chrome Frame.  -->
-  <!--[if lt IE 8 ]>
-    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
-    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
-  <![endif]-->
 
 </body>
 </html>
