@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configur
 
 # Count part
 class myForm(FlaskForm):
-    message= TextAreaField("Input message",render_kw={'style':'width: 800px;height:250px; overflow: auto; ' }) 
+    message= TextAreaField("Input message",render_kw={'style':'width: 60%;height: 200px; overflow: auto; padding:5px 5px 5px 5px' }) 
     submit= SubmitField("Send")
 
 @app.route('/',methods=["GET","POST"])
