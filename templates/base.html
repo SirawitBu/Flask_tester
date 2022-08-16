@@ -65,14 +65,14 @@
     </ul>
     
   </div>
-  <div class=" pt-5 main-content-div" style="padding-left: 1px; margin-top: 10px; margin-left: 10px;">
+  <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 10px; margin-left: 10px;">
     
     <div>
       <form action="/" method="post">
         {{form.hidden_tag()}}
         {{form.message.label}}
         <br>
-        {{form.message()}}
+        {{form.message(placeholder=message)}}
         <br>
         {{form.submit()}}
       </form>
@@ -83,21 +83,28 @@
     {% if message %}
       <!-- แสดงข้อความที่รับมา -->
       <div style="width: 500px">       
-        Message = 
+        Pure message = 
         {% for i in Tag %}
-          <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}} style="text-align: center;"><strong>{{ i }}</strong></span>
+          <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}} ><strong>{{i}}</strong></span>
         {% endfor %}
       </div>     
   
       <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
       <span>frequency of <strong>{{nkWord}}</strong> word</span> 
-      <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto;">
-        {% for i in fWord %}
-        {% set check = namespace(h_bool=False)%}
+      <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
           {% for j in Tag if check.h_bool == false%}
-            {% if j|string == i %}
-              {{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}
-              <br>
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+            {% if ((j|string).lower())+("'s") == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              </div>
               {% set check.h_bool = true %}
             {% endif %}
           {% endfor %}        
@@ -120,11 +127,10 @@
       <br>
       <span>Paragraph = {{cPar}}</span>
       <br>
-  
     {% endif %}
     
   </div>
-  
+
   <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
   <script>
 
