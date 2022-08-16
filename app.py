@@ -4,6 +4,9 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
 import spacy
+from collections import OrderedDict
+import re
+import contractions
 
 app = Flask(__name__)
 
@@ -11,18 +14,19 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configur
 
 # Count part
 class myForm(FlaskForm):
-    message= TextAreaField("Input message",render_kw={'style':'width: 60%;height: 200px; overflow: auto; padding:5px 5px 5px 5px' }) 
-    submit= SubmitField("Send")
+    message= TextAreaField("Input message",render_kw={'style':'width: 500px;height: 200px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    submit= SubmitField("Send",render_kw={'style':'width: 50px;height: 30px;'})
 
 @app.route('/',methods=["GET","POST"])
 def home():
     """Render website's home page."""
     sp = spacy.load('en_core_web_sm')
     message = False
-    wordSP = False
+    Pmessage = False
     Tag= False
     nTag = False
     fWord= False
+    fWordSort = False
     nkWord= False
     cWord= False
     cSent= False
@@ -33,26 +37,33 @@ def home():
     if form.validate_on_submit():
         message=form.message.data
         form.message.data=""
-        # ประเภทคำ
-        wordSP=message.split()
-        words = [x.strip(".,()'") for x in message.split()]
+        # ประเภทคำ        
+        Pmessage = contractions.fix(message)
+        print(Pmessage)
+        words = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'") for x in Pmessage.split()]
+        print(words)
         words = " ".join(words)
+        print(words)
+        # words = re.sub("'s"," 's",str(words))
         words = sp(words)
+        print(words)
         Tag={}
         for i in words:
             Tag[i]=spacy.explain(i.pos_)
+            print(i)
         # คำไม่ซ้ำและความถี่คำ
         def word_count(str):
             counts = dict()
-            words = [x.strip(".,()'") for x in str.split()]    
-            for word in words:
+            sword = [x.strip("\".,()[@_!#$%^&*()<>?/\|}{~:]=+-'") for x in str.split()]    
+            for word in sword:
                 if word in counts:
                     counts[word] += 1
                 else:
                     counts[word] = 1
             return counts
-        fWord=(word_count(message))
-        nkWord=len(word_count(message))
+        fWord=(word_count(str(words).lower()))
+        fWordSort=OrderedDict(sorted(fWord.items()))
+        nkWord=len(fWord)
         # คำทั้งหมด
         cWord=len(message.split())
         # นับประโยค
@@ -64,7 +75,7 @@ def home():
         cAlp=len(message)
         cAlpNoSp=len(message)-message.count(' ')
         cPar=message.count('\n')+1
-    return render_template('base.html',form=form,message=message,wordSP=wordSP,Tag=Tag,nTag=nTag,fWord=fWord,nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
+    return render_template('base.html',form=form,message=message,Pmessage=Pmessage,Tag=Tag,nTag=nTag,fWord=fWord,fWordSort=fWordSort,nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
 
 # Duplicate part
 @app.route('/duplicate')
