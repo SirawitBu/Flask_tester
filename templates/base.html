@@ -101,7 +101,13 @@
               </div>
               {% set check.h_bool = true %}
             {% endif %}
-            {% if ((j|string).lower())+("'s") == i %}
+            {% if ((j|string).lower())+"'s" == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+            {% if ((j|string).lower())+"’s" == i %}
               <div style="padding-left: 5px;">
               <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
               </div>
