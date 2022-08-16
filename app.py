@@ -39,14 +39,10 @@ def home():
         form.message.data=""
         # ประเภทคำ        
         Pmessage = contractions.fix(message)
-        print(Pmessage)
-        words = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'") for x in Pmessage.split()]
-        print(words)
+        words = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'‘’“”") for x in Pmessage.split()]
         words = " ".join(words)
-        print(words)
         # words = re.sub("'s"," 's",str(words))
         words = sp(words)
-        print(words)
         Tag={}
         for i in words:
             Tag[i]=spacy.explain(i.pos_)
@@ -54,7 +50,7 @@ def home():
         # คำไม่ซ้ำและความถี่คำ
         def word_count(str):
             counts = dict()
-            sword = [x.strip("\".,()[@_!#$%^&*()<>?/\|}{~:]=+-'") for x in str.split()]    
+            sword = [x.strip("\".,()[@_!#$%^&*()<>?/\|}{~:]=+-'‘’“”") for x in str.split()]    
             for word in sword:
                 if word in counts:
                     counts[word] += 1
