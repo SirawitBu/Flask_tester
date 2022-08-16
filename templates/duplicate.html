@@ -45,7 +45,6 @@
       </div>
     </div>
   </nav>
-
   <div class="d-flex flex-column p-3 text-white bg-dark side-menu " style="width: 280px;height:100vh;position:fixed;left:-280px">
         
     <ul class="nav nav-pills flex-column mb-auto pt-5 side_nav_menu">
@@ -55,8 +54,51 @@
   </div>
   <div class=" pt-5 main-content-div" style="padding-left: 15px; margin-top: 10px;">
     
-      This is Duplicate Mode
-    
+    <div>
+        <form action="/duplicate/" method="post">
+          {{form2.hidden_tag()}}
+          {{form2.input1.label}}
+          <br>
+          {{form2.input1(placeholder=input1)}}
+          <hr>
+          {{form2.input2.label}}
+          <br>
+          {{form2.input2(placeholder=input2)}}
+          <br>
+          {{form2.submit2()}}
+        </form>
+    </div>
+    <br>
+    {% if input1 and input2 %}
+    <strong>Show Duplicate :</strong>
+    <div style="width:500px;height: 200px;">     
+      {% if mes1L > mes2L %}
+        {% for i in mes1 %}
+          {% if i=="*DUPLICATE*" %}
+            <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
+          {% else %}
+            <span>{{i}}</span>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for i in mes2 %}
+          {% if i=="*DUPLICATE*" %}
+            <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
+          {% else %}
+            <span>{{i}}</span>
+      {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+
+      {% elif input1=="" and input2=="" %}
+        No input1 and input2
+      {% elif input1==""%}
+        No input1
+      {% elif input2=="" %}
+        No input2
+      {% endif %}
   </div>
 
 
