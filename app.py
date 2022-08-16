@@ -19,7 +19,7 @@ class myForm(FlaskForm):
 
 @app.route('/',methods=["GET","POST"])
 def home():
-    """Render website's home page."""
+    form=myForm()
     sp = spacy.load('en_core_web_sm')
     message = False
     Pmessage = False
@@ -32,9 +32,8 @@ def home():
     cSent= False
     cAlp = False
     cAlpNoSp = False
-    cPar = False
-    form=myForm()
-    if form.validate_on_submit():
+    cPar = False   
+    if form.validate_on_submit()and form.submit.data:
         message=form.message.data
         form.message.data=""
         # ประเภทคำ        
@@ -74,10 +73,43 @@ def home():
     return render_template('base.html',form=form,message=message,Pmessage=Pmessage,Tag=Tag,nTag=nTag,fWord=fWord,fWordSort=fWordSort,nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar)
 
 # Duplicate part
-@app.route('/duplicate')
+class dupForm(FlaskForm):
+    input1= TextAreaField("Input message 1",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    input2= TextAreaField("Input message 2",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    submit2= SubmitField("Send",render_kw={'style':'width: 50px;height: 30px;'})
+
+@app.route('/duplicate/',methods=["GET","POST"])
 def duplicate():
-    """Render the website's about page."""
-    return render_template('duplicate.html')
+    form2=dupForm()
+    input1 = False
+    input2 = False
+    mes1 = False
+    mes2 = False
+    mes1L = False
+    mes2L = False
+    if form2.validate_on_submit()and form2.submit2.data:
+        input1=form2.input1.data
+        input2=form2.input2.data
+        form2.input1.data=""
+        form2.input2.data=""
+        if (input1!="" and input2!=""):
+            mes1=(input1.split())
+            mes2=(input2.split())
+            mes1L=len(mes1)
+            mes2L=len(mes2)
+            if (mes1L>=mes2L):
+                mes1=input1.split(input2)
+                mes1=("*DUPLICATE*").join(mes1)
+                mes1=mes1.split()
+                mes2=" ".join(mes2)
+
+            else:
+                mes2=input2.split(input1)
+                mes2=("*DUPLICATE*").join(mes2)
+                mes2=mes2.split()
+                mes1=" ".join(mes1)
+
+    return render_template('duplicate.html',form2=form2,input1=input1,input2=input2,mes1=mes1,mes2=mes2,mes1L=mes1L,mes2L=mes2L)
 
 # About us part
 @app.route('/about')
