@@ -88,6 +88,7 @@ def duplicate():
     mes2 = False
     mes1L = False
     mes2L = False
+    Ames = False
     if form2.validate_on_submit()and form2.submit2.data:
         input1=form2.input1.data
         input2=form2.input2.data
@@ -98,19 +99,24 @@ def duplicate():
             mes2=(input2.split())
             mes1L=len(mes1)
             mes2L=len(mes2)
+            Ames=[]
             if (mes1L>=mes2L):
-                mes1=input1.split(input2)
-                mes1=("*DUPLICATE*").join(mes1)
-                mes1=mes1.split()
-                mes2=" ".join(mes2)
+                mes1=input1.split()
+                for i in mes1:
+                    if(i==input2):
+                        Ames.append("*DUPLICATE*")
+                    else:
+                        Ames.append(i)
 
             else:
-                mes2=input2.split(input1)
-                mes2=("*DUPLICATE*").join(mes2)
-                mes2=mes2.split()
-                mes1=" ".join(mes1)
+                mes2=input2.split()
+                for i in mes2:
+                    if(i==input1):
+                        Ames.append("*DUPLICATE*")
+                    else:
+                        Ames.append(i)
 
-    return render_template('duplicate.html',form2=form2,input1=input1,input2=input2,mes1=mes1,mes2=mes2,mes1L=mes1L,mes2L=mes2L)
+    return render_template('duplicate.html',form2=form2,input1=input1,input2=input2,mes1L=mes1L,mes2L=mes2L,Ames=Ames)
 
 # About us part
 @app.route('/about')
