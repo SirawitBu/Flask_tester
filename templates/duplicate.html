@@ -71,23 +71,43 @@
     <br>
     {% if input1 and input2 %}
     <strong>Show Duplicate :</strong>
-    <div style="width:500px;height: 200px;">     
-      {% if mes1L >= mes2L %}
-        {% for i in Ames %}
-          {% if i=="*DUPLICATE*" %}
-            <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
-          {% else %}
-            <span>{{i}}</span>
-          {% endif %}
-        {% endfor %}
+    <div style="width:500px;height: 200px;"> 
+      {% if mes1L==1 or mes2L==1 %}
+        {% if mes1L >= mes2L %}
+          {% for i in Ames %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for i in Ames %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       {% else %}
-        {% for i in Ames %}
-          {% if i=="*DUPLICATE*" %}
-            <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
-          {% else %}
-            <span>{{i}}</span>
-      {% endif %}
-        {% endfor %}
+        {% if mes1L >= mes2L %}
+          {% for i in mes1 %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for i in mes2 %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       {% endif %}
     </div>
 
