@@ -70,13 +70,15 @@
     </div>
     <br>
     {% if input1 and input2 %}
+
+    <!-- {{mes1}} <br> {{mes2}} <br> {{Ames}} <br> {{mes1L}} <br> {{mes2L}} <br> -->
     <strong>Show Duplicate :</strong>
     <div style="width:500px;height: 200px;"> 
       {% if mes1L==1 or mes2L==1 %}
         {% if mes1L >= mes2L %}
           {% for i in Ames %}
             {% if i=="*DUPLICATE*" %}
-              <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
+              <span style="background-color: rgb(101, 207, 248)">{{mes2}}</span>
             {% else %}
               <span>{{i}}</span>
             {% endif %}
@@ -84,7 +86,7 @@
         {% else %}
           {% for i in Ames %}
             {% if i=="*DUPLICATE*" %}
-              <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
+              <span style="background-color: rgb(101, 207, 248)">{{mes1}}</span>
             {% else %}
               <span>{{i}}</span>
             {% endif %}
