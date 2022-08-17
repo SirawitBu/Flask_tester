@@ -40,12 +40,14 @@ def home():
         Pmessage = contractions.fix(message)
         words = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'‘’“”") for x in Pmessage.split()]
         words = " ".join(words)
-        # words = re.sub("'s"," 's",str(words))
         words = sp(words)
         Tag={}
         for i in words:
             Tag[i]=spacy.explain(i.pos_)
-            print(i)
+        Awords=[]
+        for i in Tag:
+            Awords.append(str(i))
+        words = " ".join(Awords)
         # คำไม่ซ้ำและความถี่คำ
         def word_count(str):
             counts = dict()
@@ -58,9 +60,8 @@ def home():
             return counts
         fWord=(word_count(str(words).lower()))
         fWordSort=OrderedDict(sorted(fWord.items()))
-        nkWord=len(fWord)
         # คำทั้งหมด
-        cWord=len(message.split())
+        cWord=len(words.split())
         # นับประโยค
         cSent=message.count(".")
         if Tag != False:
