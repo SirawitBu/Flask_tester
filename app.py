@@ -95,34 +95,40 @@ def duplicate():
         form2.input1.data=""
         form2.input2.data=""
         if (input1!="" and input2!=""):
-            mes1=(input1.split())
-            mes2=(input2.split())
+            mes1 = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'‘’“”") for x in input1.split()]
+            mes1 = " ".join(mes1)
+            mes2 = [x.strip("\"\.,()[@_!#$%^&*()<>?/\|}{~:]=+-'‘’“”") for x in input2.split()]
+            mes2 = " ".join(mes2)
+            mes1=(mes1.split("."))
+            mes2=(mes2.split("."))
+            mes1=" . ".join(mes1)
+            mes2=" . ".join(mes2)
+            mes1=mes1.split()
+            mes2=mes2.split()
             mes1L=len(mes1)
             mes2L=len(mes2)
             Ames=[]
             if (mes2L==1 or mes1L==1):
                 if (mes1L>=mes2L):
-                    mes1=input1.split()
-                for i in mes1:
-                    if(i==input2):
-                        Ames.append("*DUPLICATE*")
-                    else:
-                        Ames.append(i)
+                    for i in mes1:
+                        mes2="".join(mes2)
+                        if(i==mes2):
+                            Ames.append("*DUPLICATE*")
+                        else:
+                            Ames.append(i)
                 else:
-                    mes2=input2.split()
                     for i in mes2:
-                        if(i==input1):
+                        mes1="".join(mes1)
+                        if(i==mes1):
                             Ames.append("*DUPLICATE*")
                         else:
                             Ames.append(i)
             else:
                 if (mes1L>=mes2L):
-                    mes1=input1.split(input2)
                     mes1=("*DUPLICATE*").join(mes1)
                     mes1=mes1.split()
                     mes2="".join(mes2)
                 else:
-                    mes2=input2.split(input1)
                     mes2=("*DUPLICATE*").join(mes2)
                     mes2=mes2.split()
                     mes1="".join(mes1)
