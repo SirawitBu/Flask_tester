@@ -97,19 +97,19 @@
           {% for j in Tag if check.h_bool == false%}
             {% if (j|string).lower() == i %}
               <div style="padding-left: 5px;">
-              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
               </div>
               {% set check.h_bool = true %}
             {% endif %}
-            {% if ((j|string).lower())+"'s" == i %}
+            {% if ((j|string).lower()) == "'"+i %}
               <div style="padding-left: 5px;">
-              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
               </div>
               {% set check.h_bool = true %}
             {% endif %}
-            {% if ((j|string).lower())+"’s" == i %}
+            {% if ((j|string).lower()) == "’"+i %}
               <div style="padding-left: 5px;">
-              <span class="mHover" >{{i.lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
               </div>
               {% set check.h_bool = true %}
             {% endif %}
