@@ -125,13 +125,19 @@ def duplicate():
                             Ames.append(i)
             else:
                 if (mes1L>=mes2L):
+                    mes1=" ".join(mes1)
+                    mes2=" ".join(mes2)
+                    mes1=mes1.split(mes2)
                     mes1=("*DUPLICATE*").join(mes1)
                     mes1=mes1.split()
-                    mes2="".join(mes2)
+                    mes2=" ".join(mes2)
                 else:
+                    mes1=" ".join(mes1)
+                    mes2=" ".join(mes2)
+                    mes2=mes2.split(mes1)
                     mes2=("*DUPLICATE*").join(mes2)
                     mes2=mes2.split()
-                    mes1="".join(mes1)
+                    mes1=" ".join(mes1)
 
     return render_template('duplicate.html',form2=form2,input1=input1,input2=input2,mes1=mes1,mes2=mes2,mes1L=mes1L,mes2L=mes2L,Ames=Ames)
 
