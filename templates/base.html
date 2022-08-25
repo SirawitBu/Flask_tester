@@ -48,10 +48,13 @@
             <a class="nav-link top_nav_menu active" href="/">Count</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link top_nav_menu" href="/duplicate">Duplicate</a>
+            <a class="nav-link top_nav_menu" href="/similarity">Similarity</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link top_nav_menu" href="/about">About</a>
+            <a class="nav-link top_nav_menu" href="/matching">Matching</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu" href="/about">About us</a>
           </li>
         </ul>
       </div>
@@ -83,41 +86,372 @@
     {% if message %}
       <!-- แสดงข้อความที่รับมา -->
       <div style="width: 500px">       
-        Pure message = 
+        message = 
         {% for i in Tag %}
           <span class="mHover" id="mClick" tabindex="0" title={{Tag[i]}} ><strong>{{i}}</strong></span>
         {% endfor %}
       </div>     
   
       <!-- คำทั้งหมด,ความถี่ของคำ,ประเภทคำ -->
-      <span>frequency of <strong>{{nkWord}}</strong> word</span> 
-      <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+      
+      {% if adj!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Adjective</strong>({{Nnadj}},{{Fadj}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
         {% for i in fWordSort %}
         {% set check = namespace(h_bool=false)%}
-          {% for j in Tag if check.h_bool == false%}
+          {% for j in adj if check.h_bool == false%}
             {% if (j|string).lower() == i %}
               <div style="padding-left: 5px;">
-              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
-              </div>
-              {% set check.h_bool = true %}
-            {% endif %}
-            {% if ((j|string).lower()) == "'"+i %}
-              <div style="padding-left: 5px;">
-              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
-              </div>
-              {% set check.h_bool = true %}
-            {% endif %}
-            {% if ((j|string).lower()) == "’"+i %}
-              <div style="padding-left: 5px;">
-              <span class="mHover" >{{(j|string).lower()}} ({{Tag[j]}}) = {{fWord[i]}}</span>
+              <span class="mHover" >{{(j|string).lower()}} = {{Nadj[i]}}</span>
               </div>
               {% set check.h_bool = true %}
             {% endif %}
           {% endfor %}        
         {% endfor %}
-      </div>
-      
-      <div></div>
+        </div>
+      {% endif %}
+
+      {% if adp!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Adposition</strong> ({{Nnadp}},{{Fadp}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in adp if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nadp[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+      {% if adv!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Adverb</strong> ({{Nnadv}},{{Fadv}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in adv if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nadv[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if aux!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Auxiliary</strong> ({{Nnaux}},{{Faux}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in aux if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Naux[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if conj!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Conjunction</strong> ({{Nnconj}},{{Fconj}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in conj if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nconj[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if cconj!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Coordinating Conjunction</strong> ({{Nncconj}},{{Fcconj}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in cconj if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Ncconj[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if det!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Determiner</strong> ({{Nndet}},{{Fdet}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in det if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Ndet[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if intj!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Interjection</strong> ({{Nnintj}},{{Fintj}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in intj if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nintj[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if noun!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Noun</strong> ({{Nnnoun}},{{Fnoun}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in noun if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nnoun[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if num!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Numeral</strong> ({{Nnnum}},{{Fnum}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in num if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nnum[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if part!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Particle</strong> ({{Nnpart}},{{Fpart}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in part if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Npart[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if pron!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Pronoun</strong> ({{Nnpron}},{{Fpron}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in pron if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Npron[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if propn!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Proper Noun</strong> ({{Nnpropn}},{{Fpropn}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in propn if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Npropn[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if punct!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Punctuation</strong> ({{Nnpunct}},{{Fpunct}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in punct if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Npunct[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if sconj!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Subordinating Conjunction</strong> ({{Nnsconj}},{{Fsconj}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in sconj if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nsconj[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if sym!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Symbol</strong> ({{Nnsym}},{{Fsym}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in sym if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nsym[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if verb!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Verb</strong> ({{Nnverb}},{{Fverb}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in verb if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nverb[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if x!={} %}
+        <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+          <strong>Other</strong> ({{Nnx}},{{Fx}})
+        </p> 
+        <hr style="margin-top: 5px; margin-bottom: 5px;">
+        {% for i in fWordSort %}
+        {% set check = namespace(h_bool=false)%}
+          {% for j in x if check.h_bool == false%}
+            {% if (j|string).lower() == i %}
+              <div style="padding-left: 5px;">
+              <span class="mHover" >{{(j|string).lower()}} = {{Nx[i]}}</span>
+              </div>
+              {% set check.h_bool = true %}
+            {% endif %}
+          {% endfor %}        
+        {% endfor %}
+        </div>
+      {% endif %}
   
       <!-- จำนวนคำทั้งหมด -->
       <span>Words ={{cWord}}</span>

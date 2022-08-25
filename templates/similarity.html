@@ -1,0 +1,257 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Similarity Mode</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="/static/favicon.ico">
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <!-- Rather use `less.js` to dynamically compile your `stylesheet/less` files? -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
+  <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top" style="background-color: black; width: 100%;">
+    <div class="container-fluid" >
+        <button class="btn menu-btn" type="button" style="display:none;" onclick="show_side_menu()" >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      <a class="navbar-brand" href="#">&nbsp;WORD</a>
+      <div class="collapse navbar-collapse "  >
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 menu-top">
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu active" href="#">Select Mode></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu " href="/">Count</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu active" href="/similarity">Similarity</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu" href="/matching">Matching</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link top_nav_menu" href="/about">About us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="d-flex flex-column p-3 text-white bg-dark side-menu " style="width: 280px;height:100vh;position:fixed;left:-280px">
+        
+    <ul class="nav nav-pills flex-column mb-auto pt-5 side_nav_menu">
+
+    </ul>
+    
+  </div>
+  <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 10px; margin-left: 10px;">
+    
+    <div>
+        <form action="/similarity/" method="post">
+          {{form2.hidden_tag()}}
+          {{form2.input1.label}}
+          <br>
+          {{form2.input1(placeholder=input1)}}
+          <hr>
+          {{form2.input2.label}}
+          <br>
+          {{form2.input2(placeholder=input2)}}
+          <br>
+          {{form2.submit2()}}
+        </form>
+    </div>
+    <br>
+    {% if input1 and input2 %}
+    <!-- {{mes1}} <br> {{mes2}} <br> {{Ames}} <br> {{mes1L}} <br> {{mes2L}} <br>  -->
+      <strong>Show Duplicate :</strong>
+      <div style="width:500px;height: 200px;"> 
+      {% if mes1L==1 or mes2L==1 %}
+        {% if mes1L >= mes2L %}
+          {% for i in Ames %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{mes2}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for i in Ames %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{mes1}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% if mes1L >= mes2L %}
+          {% for i in mes1 %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input2}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for i in mes2 %}
+            {% if i=="*DUPLICATE*" %}
+              <span style="background-color: rgb(101, 207, 248)">{{input1}}</span>
+            {% else %}
+              <span>{{i}}</span>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+      <div>Similarity ratio = <strong>{{ratio}}</strong></div>
+      </div>
+
+
+    {% elif input1=="" and input2=="" %}
+      <strong>No input1 and input2 !</strong> 
+    {% elif input1==""%}
+      <strong>No input1!</strong> 
+    {% elif input2=="" %}
+      <strong>No input2!</strong> 
+    {% endif %}
+  </div>
+
+
+  <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
+  <script>
+
+    function show_side_menu()//function สำหรับแสดง หรือซ่อน side เมนู
+    {
+        let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
+
+        if(left_pos==-280)//ถ้า side เมนูยังไม่แสดง ให้แสดง side เมนู แบบ animation
+        {
+
+            var menu_animation=setInterval(function(){
+
+                left_pos+=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content+=5;
+
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+
+                
+                if(left_pos==0)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        else
+        {   //ถ้า side เมนูยังแสดงอยู่ ให้ซ่อน side เมนู แบบ  animation
+            var menu_animation=setInterval(function(){
+
+                left_pos-=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content-=5;
+                
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+                
+                if(left_pos==-280)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        
+    }
+
+    function responsive()//function กำหนดให้ซ่อนปุ่ม เปิดปิด เมนูข้าง หรือแสดงเมนูบน
+    {
+        if(window.innerWidth <= 768)//หน้าจอน้อยกว่า หรือเท่ากับ 768
+        {
+            document.querySelector(".menu-top").style.display="none";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="";//แสดงปุ่มสำหรับเมนูข้าง
+        }
+        else
+        {
+            document.querySelector(".menu-top").style.display="";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="none";//ซ่อนปุ่มสำหรับเมนูข้าง
+        }
+    }
+    
+    (function(){
+      //-----เมื่อเปิดหน้าเว็บมาเราจะให้ เมนูด้านบน กับ Side เมนูด้านข้างมีเมนูแบบเดียวกัน
+      var top_nav_menu=document.querySelectorAll(".top_nav_menu");
+      var side_menu_html="";
+      top_nav_menu.forEach(element => {
+          side_menu_html+=`<li class="nav-item">
+          <a href="${element.href}" class="nav-link text-white ">
+              ${element.innerHTML}
+          </a>
+        </li>`;
+      });
+      document.querySelector(".side_nav_menu").innerHTML=side_menu_html;
+
+      responsive();
+
+    })();
+    // ถ้าหน้าเว็บมีการเปลี่ยนขนาดให้เรียก function responsive() เพื่อ ดูว่าจะซ่อน หรือ แสดงเมนูบน
+    window.addEventListener("resize", function(){
+
+        responsive();
+        
+    });
+    //หากมีการคลิกที่เนื้อหาเว็บ แต่ Side เมนูเปิดอยู่ ให้ซ่อน Side เมนู
+    document.querySelector("body").addEventListener("click", function(){
+
+        let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
+        if(left_pos==0)
+        {
+            var menu_animation=setInterval(function(){
+
+                left_pos-=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content-=5;
+                
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+                
+                if(left_pos==-280)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        
+    });
+
+  </script>
+
+  <!-- JavaScript at the bottom for fast page loading -->
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/libs/jquery.js">\x3C/script>')</script>
+  <!-- mathiasbynens.be/notes/async-analytics-snippet Change UA-XXXXX-X to be your site's ID -->
+  <script>
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+  </script>
+
+</body>
+</html>
