@@ -1,33 +1,31 @@
-    <!doctype html>
-    <html class="no-js" lang="en">
-    <head>
-        <meta charset="utf-8">
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
 
-        <title>Matching</title>
+    <title>Matching MODE</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="shortcut icon" href="/static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/static/favicon.ico">
 
-        <style>
-            .mHover:hover{
-                background-color: rgb(101, 207, 248);
-            }  
-        </style>
+    <style>
+        .mHover:hover{
+            background-color: rgb(101, 207, 248);
+        }  
+    </style>
         
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
+    <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-        <!-- Rather use `less.js` to dynamically compile your `stylesheet/less` files? -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
-        <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
+</head>
 
-
-    </head>
-
-    <body>
-        <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top" style="background-color: black; width: 100%;">
+<body>
+    <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top" style="background-color: black; width: 100%;">
         <div class="container-fluid" >
             <button class="btn menu-btn" type="button" style="display:none;" onclick="show_side_menu()" >
                 <span class="navbar-toggler-icon"></span>
@@ -53,235 +51,302 @@
             </ul>
         </div>
         </div>
-        </nav>
-        <div class="d-flex flex-column p-3 text-white bg-dark side-menu " style="width: 280px;height:100vh;position:fixed;left:-280px">
+    </nav>
+    <div class="d-flex flex-column p-3 text-white bg-dark side-menu " style="width: 280px;height:100vh;position:fixed;left:-280px">
                 
             <ul class="nav nav-pills flex-column mb-auto pt-5 side_nav_menu">
             </ul>
             
-        </div>
-        <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 10px; margin-left: 10px;">
+    </div>
+    <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 10px; margin-left: 10px;">
             
-            <div>
-                <form action="/matching/" method="post">
-                {{form.hidden_tag()}}
-                {{form.message.label}}
-                <br>
-                {{form.message(placeholder=message)}}
-                <br>
-                {{form.submit()}}
-                </form>
+        <div>
+            <form action="/matching/" method="post">
+            {{form.hidden_tag()}}
+            {{form.message.label}}
+            <br>
+            {{form.message(placeholder=message)}}
+            <br>
+            {{form.submit()}}
+            </form>
+        </div>
+        <hr>
+        <!-- ส่วนแสดงผล -->
+        {% if message %}
+            <div style="width: 500px">       
+                message = {{message}}
             </div>
-            <hr>
-            <!-- ส่วนแสดงผล -->
-            {% if message %}
-                <div style="width: 500px">       
-                    message = {{message}}
+            <br>
+            {% if msl1!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 1</strong> ({{Nnmsl1}},{{Fmsl1}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl1 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl1[i]}}</span>
+                    </div>      
+                    {% endfor %}
                 </div>
-                <br>
-                {% if msl1!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 1</strong> ({{Nnmsl1}},{{Fmsl1}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl1 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl1[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl2!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 2</strong> ({{Nnmsl2}},{{Fmsl2}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl2 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl2[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl3!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 3</strong> ({{Nnmsl3}},{{Fmsl3}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl3 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl3[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl4!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 4</strong> ({{Nnmsl4}},{{Fmsl4}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl4 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl4[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl5!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 5</strong> ({{Nnmsl5}},{{Fmsl5}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl5 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl5[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl6!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 6</strong> ({{Nnmsl6}},{{Fmsl6}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl6 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl6[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl7!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 7</strong> ({{Nnmsl7}},{{Fmsl7}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl7 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl7[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl8!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 8</strong> ({{Nnmsl8}},{{Fmsl8}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl8 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl8[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl9!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 9</strong> ({{Nnmsl9}},{{Fmsl9}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl9 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl9[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if msl10!=[] %}
-                    <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
-                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-                            <strong>Sublist 10</strong> ({{Nnmsl10}},{{Fmsl10}})
-                        </p> 
-                        <hr style="margin-top: 5px; margin-bottom: 5px;">
-                        {% for i in Nmsl10 %}
-                        <div style="padding-left: 5px;">
-                            <span class="mHover" >{{i}} = {{Nmsl10[i]}}</span>
-                        </div>      
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% elif message=="" %}
-                <strong>No Message send!</strong> 
             {% endif %}
-            
+            {% if msl2!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 2</strong> ({{Nnmsl2}},{{Fmsl2}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl2 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl2[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl3!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 3</strong> ({{Nnmsl3}},{{Fmsl3}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl3 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl3[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl4!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                        <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 4</strong> ({{Nnmsl4}},{{Fmsl4}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl4 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl4[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl5!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 5</strong> ({{Nnmsl5}},{{Fmsl5}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl5 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl5[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl6!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 6</strong> ({{Nnmsl6}},{{Fmsl6}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl6 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl6[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl7!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 7</strong> ({{Nnmsl7}},{{Fmsl7}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl7 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl7[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl8!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 8</strong> ({{Nnmsl8}},{{Fmsl8}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl8 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl8[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl9!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 9</strong> ({{Nnmsl9}},{{Fmsl9}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl9 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl9[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if msl10!=[] %}
+                <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
+                    <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
+                        <strong>Sublist 10</strong> ({{Nnmsl10}},{{Fmsl10}})
+                    </p> 
+                    <hr style="margin-top: 5px; margin-bottom: 5px;">
+                    {% for i in Nmsl10 %}
+                    <div style="padding-left: 5px;">
+                        <span class="mHover" >{{i}} = {{Nmsl10[i]}}</span>
+                    </div>      
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <br>
+            <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            <br>
+            <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+            <br>
 
-        </div>
-        
-        <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
+        {% elif message=="" %}
+            <strong>No Message send!</strong> 
+        {% endif %}
+
+        <!-- {{test}} -->
+    </div>
+    
+    <!-- Script chart -->
     <script>
-
-        function show_side_menu()//function สำหรับแสดง หรือซ่อน side เมนู
-        {
-            let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
-
-            if(left_pos==-280)//ถ้า side เมนูยังไม่แสดง ให้แสดง side เมนู แบบ animation
-            {
-
-                var menu_animation=setInterval(function(){
-
-                    left_pos+=5;
-                    document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
-
-                    var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
-                    left_content+=5;
-
-                    document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
-
-                    
-                    if(left_pos==0)
-                    {
-                        clearInterval(menu_animation);
-                    }
-
-                },1);
-            }
-            else
-            {   //ถ้า side เมนูยังแสดงอยู่ ให้ซ่อน side เมนู แบบ  animation
-                var menu_animation=setInterval(function(){
-
-                    left_pos-=5;
-                    document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
-
-                    var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
-                    left_content-=5;
-                    
-                    document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
-                    
-                    if(left_pos==-280)
-                    {
-                        clearInterval(menu_animation);
-                    }
-
-                },1);
-            }
-            
-        }
-
-        function responsive()//function กำหนดให้ซ่อนปุ่ม เปิดปิด เมนูข้าง หรือแสดงเมนูบน
-        {
-            if(window.innerWidth <= 768)//หน้าจอน้อยกว่า หรือเท่ากับ 768
-            {
-                document.querySelector(".menu-top").style.display="none";//ซ่อนเมนูบน
-                document.querySelector(".menu-btn").style.display="";//แสดงปุ่มสำหรับเมนูข้าง
-            }
-            else
-            {
-                document.querySelector(".menu-top").style.display="";//ซ่อนเมนูบน
-                document.querySelector(".menu-btn").style.display="none";//ซ่อนปุ่มสำหรับเมนูข้าง
-            }
-        }
+        var xValues = [{% if msl1!=[] %}"Sublist 1",{%endif%}
+        {% if msl2!=[] %}"Sublist 2",{%endif%}
+        {% if msl3!=[] %}"Sublist 3",{%endif%}
+        {% if msl4!=[] %}"Sublist 4",{%endif%}
+        {% if msl5!=[] %}"Sublist 5",{%endif%}
+        {% if msl6!=[] %}"Sublist 6",{%endif%}
+        {% if msl7!=[] %}"Sublist 7",{%endif%}
+        {% if msl8!=[] %}"Sublist 8",{%endif%}
+        {% if msl9!=[] %}"Sublist 9",{%endif%}
+        {% if msl10!=[] %}"Sublist 10"{%endif%}
+        ];
         
-        (function(){
-        //-----เมื่อเปิดหน้าเว็บมาเราจะให้ เมนูด้านบน กับ Side เมนูด้านข้างมีเมนูแบบเดียวกัน
+        var yValues = [{% if msl1!=[] %}{{Fmsl1}},{%endif%}
+        {% if msl2!=[] %}{{Fmsl2}},{%endif%}
+        {% if msl3!=[] %}{{Fmsl3}},{%endif%}
+        {% if msl4!=[] %}{{Fmsl4}},{%endif%}
+        {% if msl5!=[] %}{{Fmsl5}},{%endif%}
+        {% if msl6!=[] %}{{Fmsl6}},{%endif%}
+        {% if msl7!=[] %}{{Fmsl7}},{%endif%}
+        {% if msl8!=[] %}{{Fmsl8}},{%endif%}
+        {% if msl9!=[] %}{{Fmsl9}},{%endif%}
+        {% if msl10!=[] %}{{Fmsl10}}{%endif%}];
+
+        var barColors = ["crimson","yellow green","lime","spring green","light sky blue","violet","powder blue","light sea green","pale green","coral"];
+        
+        new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            title: {
+            display: true,
+            text: "The Academic Word List"
+            }
+        }
+        });
+        new Chart("myChart2", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+            }]
+        },
+        options: {
+            title: {
+            display: true,
+            text: "The Academic Word List"
+            }
+        }
+        });
+    </script>
+
+    <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
+    <script>
+    function show_side_menu()//function สำหรับแสดง หรือซ่อน side เมนู
+    {
+        let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
+
+        if(left_pos==-280)//ถ้า side เมนูยังไม่แสดง ให้แสดง side เมนู แบบ animation
+        {
+
+            var menu_animation=setInterval(function(){
+
+                left_pos+=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content+=5;
+
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+
+                
+                if(left_pos==0)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+        else
+        {   //ถ้า side เมนูยังแสดงอยู่ ให้ซ่อน side เมนู แบบ  animation
+            var menu_animation=setInterval(function(){
+
+                left_pos-=5;
+                document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
+
+                var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
+                left_content-=5;
+                
+                document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
+                
+                if(left_pos==-280)
+                {
+                    clearInterval(menu_animation);
+                }
+
+            },1);
+        }
+            
+    }
+
+    function responsive()//function กำหนดให้ซ่อนปุ่ม เปิดปิด เมนูข้าง หรือแสดงเมนูบน
+    {
+        if(window.innerWidth <= 768)//หน้าจอน้อยกว่า หรือเท่ากับ 768
+        {
+            document.querySelector(".menu-top").style.display="none";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="";//แสดงปุ่มสำหรับเมนูข้าง
+        }
+            else
+        {
+            document.querySelector(".menu-top").style.display="";//ซ่อนเมนูบน
+            document.querySelector(".menu-btn").style.display="none";//ซ่อนปุ่มสำหรับเมนูข้าง
+        }
+    }
+        
+    (function(){
+    //-----เมื่อเปิดหน้าเว็บมาเราจะให้ เมนูด้านบน กับ Side เมนูด้านข้างมีเมนูแบบเดียวกัน
         var top_nav_menu=document.querySelectorAll(".top_nav_menu");
         var side_menu_html="";
         top_nav_menu.forEach(element => {

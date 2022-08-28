@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Count Mode</title>
+  <title>Count MODE</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -28,6 +28,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
   <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 </head>
 
@@ -467,12 +468,93 @@
       <br>
       <span>Paragraph = {{cPar}}</span>
       <br>
+      <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+      <br>
+      <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+      <br>
 
     {% elif message=="" %}
       <strong>No Message send!</strong> 
     {% endif %}
     
   </div>
+
+  <!-- Script chart -->
+  <script>
+    var xValues = [{% if adj!={} %}"Adjective",{%endif%}
+    {% if adp!={} %}"Adposition",{%endif%}
+    {% if adv!={} %}"Adverb",{%endif%}
+    {% if aux!={} %}"Auxiliary",{%endif%}
+    {% if conj!={} %}"Conjunction",{%endif%}
+    {% if cconj!={} %}"Coordinating Conjunction",{%endif%}
+    {% if det!={} %}"Determiner",{%endif%}
+    {% if intj!={} %}"Interjection",{%endif%}
+    {% if noun!={} %}"Noun",{%endif%}
+    {% if num!={} %}"Numeral",{%endif%}
+    {% if part!={} %}"Particle",{%endif%}
+    {% if pron!={} %}"Pronoun",{%endif%}
+    {% if propn!={} %}"Proper noun",{%endif%}
+    {% if punct!={} %}"Punctuation",{%endif%}
+    {% if sconj!={} %}"Subordinating Conjunction",{%endif%}
+    {% if sym!={} %}"Symbol",{%endif%}
+    {% if verb!={} %}"Verb",{%endif%}
+    {% if x!={} %}"Other"{%endif%}];
+    
+    var yValues = [{% if adj!={} %} {{Fadj}}, {%endif%}
+    {% if adp!={} %} {{Fadp}}, {%endif%}
+    {% if adv!={} %} {{Fadv}}, {%endif%}
+    {% if aux!={} %} {{Faux}}, {%endif%}
+    {% if conj!={} %} {{Fconj}}, {%endif%}
+    {% if cconj!={} %} {{Fcconj}}, {%endif%}
+    {% if det!={} %} {{Fdet}}, {%endif%}
+    {% if intj!={} %} {{Fintj}}, {%endif%}
+    {% if noun!={} %} {{Fnoun}}, {%endif%}
+    {% if num!={} %} {{Fnum}}, {%endif%}
+    {% if part!={} %} {{Fpart}}, {%endif%}
+    {% if pron!={} %} {{Fpron}}, {%endif%}
+    {% if propn!={} %} {{Fpropn}}, {%endif%}
+    {% if punct!={} %} {{Fpunct}}, {%endif%}
+    {% if sconj!={} %} {{Fsconj}}, {%endif%}
+    {% if sym!={} %} {{Fsym}}, {%endif%}
+    {% if verb!={} %} {{Fverb}}, {%endif%}
+    {% if x!={} %} {{Fx}} {%endif%}];
+
+    var barColors = ["crimson", "salmon","gold","yellow green","lime","spring green","cyan","light sky blue","medium purple","violet","medium blue","powder blue","light sea green","pale green","lawn green","khaki","dark orange","coral"];
+    
+    new Chart("myChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        legend: {display: false},
+        title: {
+          display: true,
+          text: "Part of speech frequency"
+        }
+      }
+    });
+    new Chart("myChart2", {
+      type: "pie",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Part of speech frequency"
+        }
+      }
+    });
+  </script>
 
   <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
   <script>
@@ -587,7 +669,6 @@
     });
 
   </script>
-
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
