@@ -27,80 +27,60 @@ def home():
     fWord= False
     fWordSort = False
     nkWord= False
-    cWord= False
-    cSent= False
-    cAlp = False
-    cAlpNoSp = False
-    cPar = False
+    cWord= 0
+    cSent= 0
+    cAlp = 0
+    cAlpNoSp = 0
+    cPar = 0
     adj = {}
     adp = {}
     adv = {}
-    aux = {}
     conj = {}
-    cconj = {}
     det = {}
     intj = {}
     noun = {}
     num = {}
-    part = {}
     pron = {}
-    propn = {}
     punct = {}
-    sconj = {}
     sym = {}
     verb = {}
     x = {}
     Nadj = []
     Nadp = []
     Nadv = []
-    Naux = []
     Nconj = []
-    Ncconj = []
     Ndet = []
     Nintj = []
     Nnoun = []
     Nnum = []
-    Npart = []
     Npron = []
-    Npropn = []
     Npunct = []
-    Nsconj = []
     Nsym = []
     Nverb = []
     Nx = []
     Nnadj = False
     Nnadp = False
     Nnadv = False
-    Nnaux = False
     Nnconj = False
-    Nncconj = False
     Nndet = False
     Nnintj = False
     Nnnoun = False
     Nnnum = False
-    Nnpart = False
     Nnpron = False
-    Nnpropn = False
     Nnpunct = False
-    Nnsconj = False
     Nnsym = False
     Nnverb = False
     Nnx = False
     Fadj = 0
     Fadp = 0
     Fadv = 0
-    Faux = 0
     Fconj = 0
-    Fcconj = 0
     Fdet = 0
     Fintj = 0
     Fnoun = 0
     Fnum = 0
-    Fpart = 0
     Fpron = 0
-    Fpropn = 0
     Fpunct = 0
-    Fsconj = 0
     Fsym = 0
     Fverb = 0
     Fx = 0
@@ -116,61 +96,60 @@ def home():
             words=space.join(words)
         words = sp(words)
         for i in words:
-            Tag[i]=spacy.explain(i.pos_)
             if i.pos_.lower()=="adj":
+                Tag[i]=spacy.explain(i.pos_)
                 adj[i]=spacy.explain(i.pos_)
                 Nadj.append(str(i))
-            elif i.pos_.lower()=="adp":
-                adp[i]=spacy.explain(i.pos_)
+            elif i.pos_.lower()=="adp" or i.pos_.lower()=="part":
+                Tag[i]="preposition"
+                adp[i]="preposition"
                 Nadp.append(str(i))
             elif i.pos_.lower()=="adv":
+                Tag[i]=spacy.explain(i.pos_)
                 adv[i]=spacy.explain(i.pos_)
                 Nadv.append(str(i))
-            elif i.pos_.lower()=="aux":
-                aux[i]=spacy.explain(i.pos_)
-                Naux.append(str(i))
-            elif i.pos_.lower()=="conj":
-                conj[i]=spacy.explain(i.pos_)
+            elif i.pos_.lower()=="conj" or i.pos_.lower()=="cconj" or i.pos_.lower()=="sconj":
+                Tag[i]="conjunction"
+                conj[i]="conjunction"
                 Nconj.append(str(i))
-            elif i.pos_.lower()=="cconj":
-                cconj[i]=spacy.explain(i.pos_)
-                Ncconj.append(str(i))
             elif i.pos_.lower()=="det":
+                Tag[i]=spacy.explain(i.pos_)
                 det[i]=spacy.explain(i.pos_)
                 Ndet.append(str(i))
             elif i.pos_.lower()=="intj":
+                Tag[i]=spacy.explain(i.pos_)
                 intj[i]=spacy.explain(i.pos_)
                 Nintj.append(str(i))
-            elif i.pos_.lower()=="noun":
-                noun[i]=spacy.explain(i.pos_)
+            elif i.pos_.lower()=="noun" or i.pos_.lower()=="pron":
+                Tag[i]="noun"
+                noun[i]="noun"
                 Nnoun.append(str(i))
             elif i.pos_.lower()=="num":
+                Tag[i]=spacy.explain(i.pos_)
                 num[i]=spacy.explain(i.pos_)
                 Nnum.append(str(i))
-            elif i.pos_.lower()=="part":
-                part[i]=spacy.explain(i.pos_)
-                Npart.append(str(i))
             elif i.pos_.lower()=="pron":
+                Tag[i]=spacy.explain(i.pos_)
                 pron[i]=spacy.explain(i.pos_)
                 Npron.append(str(i))
-            elif i.pos_.lower()=="propn":
-                propn[i]=spacy.explain(i.pos_)
-                Npropn.append(str(i))
             elif i.pos_.lower()=="punct":
+                Tag[i]=spacy.explain(i.pos_)
                 punct[i]=spacy.explain(i.pos_)
                 Npunct.append(str(i))
-            elif i.pos_.lower()=="sconj":
-                sconj[i]=spacy.explain(i.pos_)
-                Nsconj.append(str(i))
             elif i.pos_.lower()=="sym":
+                Tag[i]=spacy.explain(i.pos_)
                 sym[i]=spacy.explain(i.pos_)
                 Nsym.append(str(i))
-            elif i.pos_.lower()=="verb":
-                verb[i]=spacy.explain(i.pos_)
+            elif i.pos_.lower()=="verb" or i.pos_.lower()=="aux":
+                Tag[i]="verb"
+                verb[i]="verb"
                 Nverb.append(str(i))
             elif i.pos_.lower()=="x":
+                Tag[i]=spacy.explain(i.pos_)
                 x[i]=spacy.explain(i.pos_)
                 Nx.append(str(i))
+            else:
+                Tag[i]=spacy.explain(i.pos_)
         Awords=[]
         for i in Tag:
             Awords.append(str(i))
@@ -193,203 +172,158 @@ def home():
             Nadj=" ".join(Nadj)
             Nadj=(word_count(str(Nadj).lower()))
             Nnadj=len(Nadj)
+            for i in Nadj:
+                check=False
+                for j in adj:
+                    if (str(j).lower()==i and check==False):
+                        Fadj += int(Nadj[i])
+                        check= True
         if adp != {}:
             Nadp=" ".join(Nadp)
             Nadp=(word_count(str(Nadp).lower()))
             Nnadp=len(Nadp)
+            for i in Nadp:
+                check=False
+                for j in adp:
+                    if (str(j).lower()==i and check==False):
+                        Fadp += int(Nadp[i])
+                        check= True
         if adv != {}:
             Nadv=" ".join(Nadv)
             Nadv=(word_count(str(Nadv).lower()))
             Nnadv=len(Nadv)
-        if aux != {}:
-            Naux=" ".join(Naux)
-            Naux=(word_count(str(Naux).lower()))
-            Nnaux=len(Naux)
+            for i in Nadv:
+                check=False
+                for j in adv:
+                    if (str(j).lower()==i and check==False):
+                        Fadv += int(Nadv[i])
+                        check= True
         if conj != {}:
             Nconj=" ".join(Nconj)
             Nconj=(word_count(str(Nconj).lower()))
             Nnconj=len(Nconj)
-        if cconj != {}:
-            Ncconj=" ".join(Ncconj)
-            Ncconj=(word_count(str(Ncconj).lower()))
-            Nncconj=len(Ncconj)
+            for i in Nconj:
+                check=False
+                for j in conj:
+                    if (str(j).lower()==i and check==False):
+                        Fconj += int(Nconj[i])
+                        check= True
         if det != {}:
             Ndet=" ".join(Ndet)
             Ndet=(word_count(str(Ndet).lower()))
             Nndet=len(Ndet)
+            for i in Ndet:
+                check=False
+                for j in det:
+                    if (str(j).lower()==i and check==False):
+                        Fdet += int(Ndet[i])
+                        check= True
         if intj != {}:
             Nintj=" ".join(Nintj)
             Nintj=(word_count(str(Nintj).lower()))
             Nnintj=len(Nintj)
+            for i in Nintj:
+                check=False
+                for j in intj:
+                    if (str(j).lower()==i and check==False):
+                        Fintj += int(Nintj[i])
+                        check= True
         if noun != {}:
             Nnoun=" ".join(Nnoun)
             Nnoun=(word_count(str(Nnoun).lower()))
             Nnnoun=len(Nnoun)
+            for i in Nnoun:
+                check=False
+                for j in noun:
+                    if (str(j).lower()==i and check==False):
+                        Fnoun += int(Nnoun[i])
+                        check= True
         if num != {}:
             Nnum=" ".join(Nnum)
             Nnum=(word_count(str(Nnum).lower()))
             Nnnum=len(Nnum)
-        if part != {}:
-            Npart=" ".join(Npart)
-            Npart=(word_count(str(Npart).lower()))
-            Nnpart=len(Npart)
+            for i in Nnum:
+                check=False
+                for j in num:
+                    if (str(j).lower()==i and check==False):
+                        Fnum += int(Nnum[i])
+                        check= True
         if pron != {}:
             Npron=" ".join(Npron)
             Npron=(word_count(str(Npron).lower()))
             Nnpron=len(Npron)
-        if propn != {}:
-            Npropn=" ".join(Npropn)
-            Npropn=(word_count(str(Npropn).lower()))
-            Nnpropn=len(Npropn)
+            for i in Npron:
+                check=False
+                for j in pron:
+                    if (str(j).lower()==i and check==False):
+                        Fpron += int(Npron[i])
+                        check= True
         if punct != {}:
             Npunct=" ".join(Npunct)
             Npunct=(word_count(str(Npunct).lower()))
             Nnpunct=len(Npunct)
-        if sconj != {}:
-            Nsconj=" ".join(Nsconj)
-            Nsconj=(word_count(str(Nsconj).lower()))
-            Nnsconj=len(Nsconj)
+            for i in Npunct:
+                check=False
+                for j in punct:
+                    if (str(j).lower()==i and check==False):
+                        Fpunct += int(Npunct[i])
+                        check= True
         if sym != {}:
             Nsym=" ".join(Nsym)
             Nsym=(word_count(str(Nsym).lower()))
             Nnsym=len(Nsym)
+            for i in Nsym:
+                check=False
+                for j in sym:
+                    if (str(j).lower()==i and check==False):
+                        Fsym += int(Nsym[i])
+                        check= True
         if verb != {}:
             Nverb=" ".join(Nverb)
             Nverb=(word_count(str(Nverb).lower()))
             Nnverb=len(Nverb)
+            for i in Nverb:
+                check=False
+                for j in verb:
+                    if (str(j).lower()==i and check==False):
+                        Fverb += int(Nverb[i])
+                        check= True
         if x != {}:
             Nx=" ".join(Nx)
             Nx=(word_count(str(Nx).lower()))
             Nnx=len(Nx)
-        for i in Nadj:
-            check=False
-            for j in adj:
-                if (str(j).lower()==i and check==False):
-                    Fadj += int(Nadj[i])
-                    check= True
-        for i in Nadp:
-            check=False
-            for j in adp:
-                if (str(j).lower()==i and check==False):
-                    Fadp += int(Nadp[i])
-                    check= True
-        for i in Nadv:
-            check=False
-            for j in adv:
-                if (str(j).lower()==i and check==False):
-                    Fadv += int(Nadv[i])
-                    check= True
-        for i in Naux:
-            check=False
-            for j in aux:
-                if (str(j).lower()==i and check==False):
-                    Faux += int(Naux[i])
-                    check= True
-        for i in Nconj:
-            check=False
-            for j in conj:
-                if (str(j).lower()==i and check==False):
-                    Fconj += int(Nconj[i])
-                    check= True
-        for i in Ncconj:
-            check=False
-            for j in cconj:
-                if (str(j).lower()==i and check==False):
-                    Fcconj += int(Ncconj[i])
-                    check= True
-        for i in Ndet:
-            check=False
-            for j in det:
-                if (str(j).lower()==i and check==False):
-                    Fdet += int(Ndet[i])
-                    check= True
-        for i in Nintj:
-            check=False
-            for j in intj:
-                if (str(j).lower()==i and check==False):
-                    Fintj += int(Nintj[i])
-                    check= True
-        for i in Nnoun:
-            check=False
-            for j in noun:
-                if (str(j).lower()==i and check==False):
-                    Fnoun += int(Nnoun[i])
-                    check= True
-        for i in Nnum:
-            check=False
-            for j in num:
-                if (str(j).lower()==i and check==False):
-                    Fnum += int(Nnum[i])
-                    check= True
-        for i in Npart:
-            check=False
-            for j in part:
-                if (str(j).lower()==i and check==False):
-                    Fpart += int(Npart[i])
-                    check= True
-        for i in Npron:
-            check=False
-            for j in pron:
-                if (str(j).lower()==i and check==False):
-                    Fpron += int(Npron[i])
-                    check= True
-        for i in Npropn:
-            check=False
-            for j in propn:
-                if (str(j).lower()==i and check==False):
-                    Fpropn += int(Npropn[i])
-                    check= True
-        for i in Npunct:
-            check=False
-            for j in punct:
-                if (str(j).lower()==i and check==False):
-                    Fpunct += int(Npunct[i])
-                    check= True
-        for i in Nsconj:
-            check=False
-            for j in sconj:
-                if (str(j).lower()==i and check==False):
-                    Fsconj += int(Nsconj[i])
-                    check= True
-        for i in Nsym:
-            check=False
-            for j in sym:
-                if (str(j).lower()==i and check==False):
-                    Fsym += int(Nsym[i])
-                    check= True
-        for i in Nverb:
-            check=False
-            for j in verb:
-                if (str(j).lower()==i and check==False):
-                    Fverb += int(Nverb[i])
-                    check= True
-        for i in Nx:
-            check=False
-            for j in x:
-                if (str(j).lower()==i and check==False):
-                    Fx += int(Nx[i])
-                    check= True
+            for i in Nx:
+                check=False
+                for j in x:
+                    if (str(j).lower()==i and check==False):
+                        Fx += int(Nx[i])
+                        check= True
         
+
         # นับค่าต่างๆ
-        cWord=len(words.split())
-        cSent=words.count(" . ")     
+        cWord=len(words.split())-Fpunct
+        for i in Tag:
+            check=False
+            if (str(i).lower()=="." and check==False):
+                        cSent += 1
+                        check= True  
         cAlp=len(message)
         cAlpNoSp=len(message)-message.count(' ')
         cPar=message.count('\n')+1
     return render_template('base.html',form=form,message=message,Pmessage=Pmessage,Tag=Tag,fWord=fWord,fWordSort=fWordSort,
-    nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar,adj=adj,adp=adp,adv=adv,aux=aux,conj=conj,
-    cconj=cconj,det=det,intj=intj,noun=noun,num=num,part=part,pron=pron,propn=propn,punct=punct,sconj=sconj,sym=sym,
-    verb=verb,x=x,Nadj=Nadj,Nadp=Nadp,Nadv=Nadv,Naux=Naux,Nconj=Nconj,Ncconj=Ncconj,Ndet=Ndet,Nintj=Nintj,Nnoun=Nnoun,
-    Nnum=Nnum,Npart=Npart,Npron=Npron,Npropn=Npropn,Npunct=Npunct,Nsconj=Nsconj,Nsym=Nsym,Nverb=Nverb,Nx=Nx,Nnadj=Nnadj,
-    Nnadp=Nnadp,Nnadv=Nnadv,Nnaux=Nnaux,Nnconj=Nnconj,Nncconj=Nncconj,Nndet=Nndet,Nnintj=Nnintj,Nnnoun=Nnnoun,Nnnum=Nnnum,
-    Nnpart=Nnpart,Nnpron=Nnpron,Nnpropn=Nnpropn,Nnpunct=Nnpunct,Nnsconj=Nnsconj,Nnsym=Nnsym,Nnverb=Nnverb,Nnx=Nnx,Fadj=Fadj,
-    Fadp=Fadp,Fadv=Fadv,Faux=Faux,Fconj=Fconj,Fcconj=Fcconj,Fdet=Fdet,Fintj=Fintj,Fnoun=Fnoun,Fnum=Fnum,Fpart=Fpart,Fpron=Fpron,
-    Fpropn=Fpropn,Fpunct=Fpunct,Fsconj=Fsconj,Fsym=Fsym,Fverb=Fverb,Fx=Fx)
+    nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar,adj=adj,adp=adp,adv=adv,conj=conj,
+    det=det,intj=intj,noun=noun,num=num,pron=pron,punct=punct,sym=sym,
+    verb=verb,x=x,Nadj=Nadj,Nadp=Nadp,Nadv=Nadv,Nconj=Nconj,Ndet=Ndet,Nintj=Nintj,Nnoun=Nnoun,
+    Nnum=Nnum,Npron=Npron,Npunct=Npunct,Nsym=Nsym,Nverb=Nverb,Nx=Nx,Nnadj=Nnadj,
+    Nnadp=Nnadp,Nnadv=Nnadv,Nnconj=Nnconj,Nndet=Nndet,Nnintj=Nnintj,Nnnoun=Nnnoun,Nnnum=Nnnum,
+    Nnpron=Nnpron,Nnpunct=Nnpunct,Nnsym=Nnsym,Nnverb=Nnverb,Nnx=Nnx,Fadj=Fadj,
+    Fadp=Fadp,Fadv=Fadv,Fconj=Fconj,Fdet=Fdet,Fintj=Fintj,Fnoun=Fnoun,Fnum=Fnum,
+    Fpron=Fpron,Fpunct=Fpunct,Fsym=Fsym,Fverb=Fverb,Fx=Fx)
 
 # Similarity part
 class dupForm(FlaskForm):
-    input1= TextAreaField("Input message 1",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
-    input2= TextAreaField("Input message 2",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    input1= TextAreaField("Main message",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    input2= TextAreaField("Message to compare",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
     submit2= SubmitField("Send",render_kw={'style':''})
 @app.route('/similarity/',methods=["GET","POST"])
 def similarity():
@@ -504,6 +438,9 @@ def matching():
     Fmsl8 = 0
     Fmsl9 = 0
     Fmsl10 = 0
+    aword = 0
+    asword = 0
+    aswordp = 0
     test=False
     if form.validate_on_submit()and form.submit.data:
         message=form.message.data
@@ -676,7 +613,9 @@ def matching():
                     if (j==i and check==False):
                         Fmsl10 += int(Nmsl10[i])
                         check= True
-
+        aword=len(words)
+        asword = Fmsl1+Fmsl2+Fmsl3+Fmsl4+Fmsl5+Fmsl6+Fmsl7+Fmsl8+Fmsl9+Fmsl10
+        aswordp = "{:.4f}".format((asword*100)/aword)
     # test=""
     # test=test.split("“")
     # test="\"".join(test)
@@ -686,7 +625,8 @@ def matching():
     msl1=msl1,msl2=msl2,msl3=msl3,msl4=msl4,msl5=msl5,msl6=msl6,msl7=msl7,msl8=msl8,msl9=msl9,msl10=msl10,
     Nmsl1=Nmsl1,Nmsl2=Nmsl2,Nmsl3=Nmsl3,Nmsl4=Nmsl4,Nmsl5=Nmsl5,Nmsl6=Nmsl6,Nmsl7=Nmsl7,Nmsl8=Nmsl8,Nmsl9=Nmsl9,Nmsl10=Nmsl10,
     Nnmsl1=Nnmsl1,Nnmsl2=Nnmsl2,Nnmsl3=Nnmsl3,Nnmsl4=Nnmsl4,Nnmsl5=Nnmsl5,Nnmsl6=Nnmsl6,Nnmsl7=Nnmsl7,Nnmsl8=Nnmsl8,Nnmsl9=Nnmsl9,Nnmsl10=Nnmsl10,
-    Fmsl1=Fmsl1,Fmsl2=Fmsl2,Fmsl3=Fmsl3,Fmsl4=Fmsl4,Fmsl5=Fmsl5,Fmsl6=Fmsl6,Fmsl7=Fmsl7,Fmsl8=Fmsl8,Fmsl9=Fmsl9,Fmsl10=Fmsl10)
+    Fmsl1=Fmsl1,Fmsl2=Fmsl2,Fmsl3=Fmsl3,Fmsl4=Fmsl4,Fmsl5=Fmsl5,Fmsl6=Fmsl6,Fmsl7=Fmsl7,Fmsl8=Fmsl8,Fmsl9=Fmsl9,Fmsl10=Fmsl10,
+    aword=aword,asword=asword,aswordp=aswordp)
 
 # About us part
 @app.route('/about')
