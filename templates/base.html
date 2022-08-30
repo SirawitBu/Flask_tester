@@ -380,10 +380,12 @@
       <br>
       <span>Punctuation = {{Fpunct}}</span>
       <br>
-      <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-      <br>
-      <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
-      <br>
+      {% if noun!={} or pron!={} or verb!={} or adj!={} or adv!={} or adp!={} or conj!={} or det!={} or intj!={}%}
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+        <br>
+        <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+        <br>
+      {% endif %}
 
     {% elif message=="" %}
       <strong>No Message send!</strong> 
