@@ -21,6 +21,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
     <script>window.less || document.write('<script src="/static/js/less.js">\x3C/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
 </head>
 
@@ -76,7 +77,6 @@
             <div style="width: 500px">       
                 message = {{message}}
             </div>
-            <br>
             {% if msl1!=[] %}
                 <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
                     <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
@@ -207,11 +207,18 @@
                     {% endfor %}
                 </div>
             {% endif %}
+            <span>Academic Words = <strong>{{asword}}</strong> words = {{aswordp}}%</span> 
             <br>
-            <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            <span>Totals Words = <strong>{{aword}}</strong> words = 100%</span> 
             <br>
-            <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
             <br>
+            {% if asword !=0 %}
+                <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+                <br>
+                <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+                <br>
+            {% endif %}
+            <span>*Based on the Academic Word List, School of Linguistics and Applied Language Studies, Victoria University of Wellington, New Zealand)</span>
 
         {% elif message=="" %}
             <strong>No Message send!</strong> 
@@ -222,16 +229,16 @@
     
     <!-- Script chart -->
     <script>
-        var xValues = [{% if msl1!=[] %}"Sublist 1",{%endif%}
-        {% if msl2!=[] %}"Sublist 2",{%endif%}
-        {% if msl3!=[] %}"Sublist 3",{%endif%}
-        {% if msl4!=[] %}"Sublist 4",{%endif%}
-        {% if msl5!=[] %}"Sublist 5",{%endif%}
-        {% if msl6!=[] %}"Sublist 6",{%endif%}
-        {% if msl7!=[] %}"Sublist 7",{%endif%}
-        {% if msl8!=[] %}"Sublist 8",{%endif%}
-        {% if msl9!=[] %}"Sublist 9",{%endif%}
-        {% if msl10!=[] %}"Sublist 10"{%endif%}
+        var xValues = [{% if msl1 != [] %}"Sublist 1",{%endif%}
+        {% if msl2 != [] %}"Sublist 2",{%endif%}
+        {% if msl3 != [] %}"Sublist 3",{%endif%}
+        {% if msl4 != [] %}"Sublist 4",{%endif%}
+        {% if msl5 != [] %}"Sublist 5",{%endif%}
+        {% if msl6 != [] %}"Sublist 6",{%endif%}
+        {% if msl7 != [] %}"Sublist 7",{%endif%}
+        {% if msl8 != [] %}"Sublist 8",{%endif%}
+        {% if msl9 != [] %}"Sublist 9",{%endif%}
+        {% if msl10 != [] %}"Sublist 10"{%endif%}
         ];
         
         var yValues = [{% if msl1!=[] %}{{Fmsl1}},{%endif%}
@@ -245,38 +252,80 @@
         {% if msl9!=[] %}{{Fmsl9}},{%endif%}
         {% if msl10!=[] %}{{Fmsl10}}{%endif%}];
 
-        var barColors = ["crimson","yellow green","lime","spring green","light sky blue","violet","powder blue","light sea green","pale green","coral"];
+        var barColors = ["#B22222", "#FF8C00","#808000","#228B22","#2E8B57","#0000CD","#8A2BE2","#FF1493","#D2691E","#778899"];
         
         new Chart("myChart", {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-            backgroundColor: barColors,
-            data: yValues
-            }]
-        },
-        options: {
-            legend: {display: false},
-            title: {
-            display: true,
-            text: "The Academic Word List"
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    display: true,
+                    text: "Frequency of Academic Words*"
+                },
+                scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Sublists of Academic Words'
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Frequency(Words)'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) {if (value % 1 === 0) {return value;}}
+                    }
+                }]
+                },
+                plugins: {
+                    datalabels: {
+                    color: '#fff',
+                }
+                }   
             }
-        }
         });
+
         new Chart("myChart2", {
         type: "pie",
         data: {
             labels: xValues,
             datasets: [{
-            backgroundColor: barColors,
-            data: yValues
+                backgroundColor: barColors,
+                data: yValues
             }]
         },
         options: {
             title: {
-            display: true,
-            text: "The Academic Word List"
+                display: true,
+                text: "Percentage of Academic Words"
+            },
+            tooltips: {
+                enabled: false
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                    let datasets = ctx.chart.data.datasets;
+                    if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                        let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                        let percentage = Math.round((value / sum) * 100) + '%';
+                        return percentage;
+                    } else {
+                        return percentage;
+                    }
+                },
+                color: '#fff',
+                }
             }
         }
         });
