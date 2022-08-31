@@ -101,7 +101,7 @@
         {% if noun!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Noun</strong> ({{Nnnoun}},{{Fnoun}})
+            <strong>Nouns</strong> ({{Nnnoun}},{{Fnoun}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -121,7 +121,7 @@
         {% if pron!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Pronoun</strong> ({{Nnpron}},{{Fpron}})
+            <strong>Pronouns</strong> ({{Nnpron}},{{Fpron}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -141,7 +141,7 @@
         {% if verb!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Verb</strong> ({{Nnverb}},{{Fverb}})
+            <strong>Verbs</strong> ({{Nnverb}},{{Fverb}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -161,7 +161,7 @@
         {% if adj!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Adjective</strong>({{Nnadj}},{{Fadj}})
+            <strong>Adjectives</strong>({{Nnadj}},{{Fadj}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -181,7 +181,7 @@
         {% if adv!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Adverb</strong> ({{Nnadv}},{{Fadv}})
+            <strong>Adverbs</strong> ({{Nnadv}},{{Fadv}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -202,7 +202,7 @@
         {% if adp!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Preposition</strong> ({{Nnadp}},{{Fadp}})
+            <strong>Prepositions</strong> ({{Nnadp}},{{Fadp}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -222,7 +222,7 @@
         {% if conj!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Conjunction</strong> ({{Nnconj}},{{Fconj}})
+            <strong>Conjunctions</strong> ({{Nnconj}},{{Fconj}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -242,7 +242,7 @@
         {% if det!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Determiner</strong> ({{Nndet}},{{Fdet}})
+            <strong>Determiners</strong> ({{Nndet}},{{Fdet}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -262,7 +262,7 @@
         {% if intj!={} %}
           <div style="width: 300px; height: 100px; border: 2px solid black; overflow: auto; ">
           <p style="padding-left: 5px; margin: 0 auto; position:sticky;top: 0;background-color: wheat">
-            <strong>Interjection</strong> ({{Nnintj}},{{Fintj}})
+            <strong>Interjections</strong> ({{Nnintj}},{{Fintj}})
           </p> 
           <hr style="margin-top: 5px; margin-bottom: 5px;">
           {% for i in fWordSort %}
@@ -376,9 +376,11 @@
       <!-- จำนวนตัวอักษรไม่รวมเว้นวรรค -->
       <!-- <span>Characters(No space) ={{cAlpNoSp}}</span>
       <br> -->
-      <span>Paragraph = {{cPar}}</span>
+      <span>Paragraphs = {{cPar}}</span>
       <br>
-      <span>Punctuation = {{Fpunct}}</span>
+      <span>Punctuations = {{Fpunct}}</span>
+      <br>
+      <span>Others = {{cOther}}</span>
       <br>
       {% if noun!={} or pron!={} or verb!={} or adj!={} or adv!={} or adp!={} or conj!={} or det!={} or intj!={}%}
         <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
@@ -395,34 +397,26 @@
 
   <!-- Script chart -->
   <script>
-    var xValues = [{% if adj!={} %}"Adjective",{%endif%}
-    {% if adp!={} %}"Adposition",{%endif%}
-    {% if adv!={} %}"Adverb",{%endif%}
-    {% if conj!={} %}"Conjunction",{%endif%}
-    {% if det!={} %}"Determiner",{%endif%}
-    {% if intj!={} %}"Interjection",{%endif%}
-    {% if noun!={} %}"Noun",{%endif%}
-    // {% if num!={} %}"Numeral",{%endif%}
-    {% if pron!={} %}"Pronoun",{%endif%}
-    {% if punct!={} %}"Punctuation",{%endif%}
-    // {% if sym!={} %}"Symbol",{%endif%}
-    {% if verb!={} %}"Verb",{%endif%}
-    // {% if x!={} %}"Other"{%endif%}
-  ];
+    var xValues = [{% if noun!={} %}"Nouns",{%endif%}
+    {% if pron!={} %}"Pronouns",{%endif%}  
+    {% if verb!={} %}"Verbs",{%endif%}
+    {% if adj!={} %}"Adjectives",{%endif%}
+    {% if adv!={} %}"Adverbs",{%endif%}
+    {% if adp!={} %}"Prepositions,",{%endif%}
+    {% if conj!={} %}"Conjunctions",{%endif%}
+    {% if det!={} %}"Determiners",{%endif%}
+    {% if intj!={} %}"Interjections",{%endif%}    
+    ];
     
-    var yValues = [{% if adj!={} %} {{Fadj}}, {%endif%}
-    {% if adp!={} %} {{Fadp}}, {%endif%}
+    var yValues = [{% if noun!={} %} {{Fnoun}}, {%endif%}
+    {% if pron!={} %} {{Fpron}}, {%endif%}  
+    {% if verb!={} %} {{Fverb}}, {%endif%}
+    {% if adj!={} %} {{Fadj}}, {%endif%}
     {% if adv!={} %} {{Fadv}}, {%endif%}
+    {% if adp!={} %} {{Fadp}}, {%endif%}    
     {% if conj!={} %} {{Fconj}}, {%endif%}
     {% if det!={} %} {{Fdet}}, {%endif%}
     {% if intj!={} %} {{Fintj}}, {%endif%}
-    {% if noun!={} %} {{Fnoun}}, {%endif%}
-    // {% if num!={} %} {{Fnum}}, {%endif%}
-    {% if pron!={} %} {{Fpron}}, {%endif%}
-    {% if punct!={} %} {{Fpunct}}, {%endif%}
-    // {% if sym!={} %} {{Fsym}}, {%endif%}
-    {% if verb!={} %} {{Fverb}}, {%endif%}
-    // {% if x!={} %} {{Fx}} {%endif%}
   ];
 
     var barColors = ["#B22222", "#FF8C00","#808000","#228B22","#2E8B57","#0000CD","#8A2BE2","#FF1493","#D2691E","#778899"];
@@ -452,7 +446,7 @@
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'Frequency(Words)'
+              labelString: 'Frequency (Words)'
             },
             ticks: {
               beginAtZero: true,
@@ -480,7 +474,7 @@
       options: {
         title: {
           display: true,
-          text: "Part of speech frequency"
+          text: "Percentage of Parts of Speech"
         },
         tooltips: {
           enabled: false
