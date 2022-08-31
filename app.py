@@ -90,13 +90,16 @@ def home():
         form.message.data=""
         # ประเภทคำ        
         words=message
-        sChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","-","‘","’","“","”"]
+        words=(words.split("’"))
+        words="'".join(words)
+        sChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","‘","’","“","”"]
         for i in sChar:
             words=(words.split(i))
             space=" "+i+" "
             words=space.join(words)
         words = sp(words)
         for i in words:
+            print(i.pos_)
             if i.pos_.lower()=="adj":
                 Tag[i]=spacy.explain(i.pos_)
                 adj[i]=spacy.explain(i.pos_)
@@ -121,7 +124,7 @@ def home():
                 Tag[i]=spacy.explain(i.pos_)
                 intj[i]=spacy.explain(i.pos_)
                 Nintj.append(str(i))
-            elif i.pos_.lower()=="noun" or i.pos_.lower()=="pron":
+            elif i.pos_.lower()=="noun" or i.pos_.lower()=="propn":
                 Tag[i]="noun"
                 noun[i]="noun"
                 Nnoun.append(str(i))
