@@ -100,6 +100,8 @@ def home():
             words=(words.split(i))
             space=" "+i+" "
             words=space.join(words)
+        words=words.split()
+        words=" ".join(words)
         words = sp(words)
         for i in words:
             if i.pos_.lower()=="adj":
