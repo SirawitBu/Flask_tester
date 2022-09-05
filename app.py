@@ -92,7 +92,6 @@ def home():
             cawords=(words.split(i))
             cawords=" ".join(cawords)
         cawords=cawords.split()
-
         words=(words.split("’"))
         words="'".join(words)        
         sChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","‘","’","“","”"]
@@ -637,13 +636,6 @@ def matching():
     Nnmsl1=Nnmsl1,Nnmsl2=Nnmsl2,Nnmsl3=Nnmsl3,Nnmsl4=Nnmsl4,Nnmsl5=Nnmsl5,Nnmsl6=Nnmsl6,Nnmsl7=Nnmsl7,Nnmsl8=Nnmsl8,Nnmsl9=Nnmsl9,Nnmsl10=Nnmsl10,
     Fmsl1=Fmsl1,Fmsl2=Fmsl2,Fmsl3=Fmsl3,Fmsl4=Fmsl4,Fmsl5=Fmsl5,Fmsl6=Fmsl6,Fmsl7=Fmsl7,Fmsl8=Fmsl8,Fmsl9=Fmsl9,Fmsl10=Fmsl10,
     aword=aword,asword=asword,aswordp=aswordp)
-
-# About us part
-@app.route('/about')
-def about():
-    """Render the website's about page."""
-    return render_template('about.html')
-
 
 
 # Fix bugs part
