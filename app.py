@@ -1,4 +1,3 @@
-from array import array
 import os
 from re import search
 from flask import Flask, render_template, request, redirect, url_for
@@ -29,8 +28,6 @@ def home():
     nkWord= False
     cWord= 0
     cSent= 0
-    cAlp = 0
-    cAlpNoSp = 0
     cPar = 0
     adj = {}
     adp = {}
@@ -90,8 +87,14 @@ def home():
         form.message.data=""
         # ประเภทคำ        
         words=message
+        saChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","'","‘","’","“","”",".","0","1","2","3","4","5","6","7","8","9"]
+        for i in saChar:
+            cawords=(words.split(i))
+            cawords=" ".join(cawords)
+        cawords=cawords.split()
+
         words=(words.split("’"))
-        words="'".join(words)
+        words="'".join(words)        
         sChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","‘","’","“","”"]
         for i in sChar:
             words=(words.split(i))
@@ -99,7 +102,6 @@ def home():
             words=space.join(words)
         words = sp(words)
         for i in words:
-            print(i.pos_)
             if i.pos_.lower()=="adj":
                 Tag[i]=spacy.explain(i.pos_)
                 adj[i]=spacy.explain(i.pos_)
@@ -304,18 +306,16 @@ def home():
                         check= True
 
         # นับค่าต่างๆ
-        cWord=len(words.split())-Fpunct-Fsym-Fnum
+        cWord=len(cawords)
         for i in Tag:
             check=False
             if (str(i).lower()=="." and check==False):
                         cSent += 1
-                        check= True  
-        cAlp=len(message)
-        cAlpNoSp=len(message)-message.count(' ')
+                        check= True 
         cPar=message.count('\n')+1
         cOther= Fnum+Fsym
     return render_template('base.html',form=form,message=message,Pmessage=Pmessage,Tag=Tag,fWord=fWord,fWordSort=fWordSort,
-    nkWord=nkWord,cWord=cWord,cSent=cSent,cAlp=cAlp,cAlpNoSp=cAlpNoSp,cPar=cPar,cOther=cOther,adj=adj,adp=adp,adv=adv,conj=conj,
+    nkWord=nkWord,cWord=cWord,cSent=cSent,cPar=cPar,cOther=cOther,adj=adj,adp=adp,adv=adv,conj=conj,
     det=det,intj=intj,noun=noun,num=num,pron=pron,punct=punct,sym=sym,
     verb=verb,x=x,Nadj=Nadj,Nadp=Nadp,Nadv=Nadv,Nconj=Nconj,Ndet=Ndet,Nintj=Nintj,Nnoun=Nnoun,
     Nnum=Nnum,Npron=Npron,Npunct=Npunct,Nsym=Nsym,Nverb=Nverb,Nx=Nx,Nnadj=Nnadj,
@@ -450,6 +450,11 @@ def matching():
         message=form.message.data
         form.message.data=""
         words=message
+        saChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","'","‘","’","“","”",".","0","1","2","3","4","5","6","7","8","9"]
+        for i in saChar:
+            aword=(words.split(i))
+            aword=" ".join(aword)
+        aword=aword.split()
         sChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","'","‘","’","“","”",".","0","1","2","3","4","5","6","7","8","9"]
         for i in sChar:
             words=(words.split(i))
@@ -616,7 +621,7 @@ def matching():
                     if (j==i and check==False):
                         Fmsl10 += int(Nmsl10[i])
                         check= True
-        aword=len(words)
+        aword=len(aword)
         asword = Fmsl1+Fmsl2+Fmsl3+Fmsl4+Fmsl5+Fmsl6+Fmsl7+Fmsl8+Fmsl9+Fmsl10
         aswordp = "{:.4f}".format((asword*100)/aword)
     # test=""
