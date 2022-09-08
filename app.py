@@ -7,17 +7,16 @@ import spacy
 from collections import OrderedDict
 from difflib import SequenceMatcher
 
-
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configured')
 
-# Count part
+# Count mode part
 class myForm(FlaskForm):
-    message= TextAreaField("Input message",render_kw={'style':'width: 500px;height: 200px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    message= TextAreaField("Input message",render_kw={'style':'width: 720px;height: 200px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
     submit= SubmitField("Send",render_kw={'style':''})
 @app.route('/',methods=["GET","POST"])
 def home():
+    # ประกาศตัวแปร
     form=myForm()
     sp = spacy.load('en_core_web_sm')
     message = False
@@ -83,9 +82,9 @@ def home():
     Fx = 0
     cOther = 0
     if form.validate_on_submit()and form.submit.data:
+        # จัดการข้อความที่รับเข้ามา
         message=form.message.data
         form.message.data=""
-        # ประเภทคำ        
         words=message
         saChar=["\"",",","(",")","[","@","_","!","#","$","%","^","&","*","(",")","<",">","?","/","\\","|","}","{","~",":","]","=","+","'","‘","’","“","”",".","0","1","2","3","4","5","6","7","8","9"]
         for i in saChar:
@@ -101,6 +100,7 @@ def home():
             words=space.join(words)
         words=words.split()
         words=" ".join(words)
+        # ใช้spacy หาPart of speech ของแต่ละคำ
         words = sp(words)
         for i in words:
             if i.pos_.lower()=="adj":
@@ -161,7 +161,7 @@ def home():
         for i in Tag:
             Awords.append(str(i))
         words = " ".join(Awords)
-        # คำไม่ซ้ำและความถี่คำ
+        # ฟังก์ชันนับจำนวนคำ
         def word_count(str):
             counts = dict()
             sword=str.split()
@@ -173,6 +173,7 @@ def home():
             return counts
         fWord=(word_count(str(words).lower()))
         fWordSort=OrderedDict(sorted(fWord.items()))
+        # นับจำนวนคำทั้งหมด และความถี่ของแต่ละคำ
         if fWord != False:
             nkWord=len(fWordSort)
         if adj != {}:
@@ -305,15 +306,17 @@ def home():
                     if (str(j).lower()==i and check==False):
                         Fx += int(Nx[i])
                         check= True
-
         # นับค่าต่างๆ
         cWord=len(cawords)
+        # นับประโยค
         for i in Tag:
             check=False
             if (str(i).lower()=="." and check==False):
                         cSent += 1
                         check= True 
+        # นับพารากราฟ
         cPar=message.count('\n')+1
+        # นับคำอื่น ๆ เช่นประเภทตัวเลขหรือสัญลักษณ์
         cOther= Fnum+Fsym
     return render_template('base.html',form=form,message=message,Pmessage=Pmessage,Tag=Tag,fWord=fWord,fWordSort=fWordSort,
     nkWord=nkWord,cWord=cWord,cSent=cSent,cPar=cPar,cOther=cOther,adj=adj,adp=adp,adv=adv,conj=conj,
@@ -325,13 +328,14 @@ def home():
     Fadp=Fadp,Fadv=Fadv,Fconj=Fconj,Fdet=Fdet,Fintj=Fintj,Fnoun=Fnoun,Fnum=Fnum,
     Fpron=Fpron,Fpunct=Fpunct,Fsym=Fsym,Fverb=Fverb,Fx=Fx)
 
-# Similarity part
+# Similarity mode part
 class dupForm(FlaskForm):
-    input1= TextAreaField("Main message",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
-    input2= TextAreaField("Message to compare",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px'}) 
+    input1= TextAreaField("Main message",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
+    input2= TextAreaField("Message to compare",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
     submit2= SubmitField("Send",render_kw={'style':''})
 @app.route('/similarity/',methods=["GET","POST"])
 def similarity():
+    # ประกาศตัวแปร
     form2=dupForm()
     input1 = False
     input2 = False
@@ -342,6 +346,7 @@ def similarity():
     Ames= False
     ratio = False
     if form2.validate_on_submit()and form2.submit2.data:
+        # จัดการข้อความที่รับมา
         input1=form2.input1.data
         input2=form2.input2.data
         form2.input1.data=""
@@ -364,6 +369,7 @@ def similarity():
             mes2=mes2.split()
             mes1L=len(mes1)
             mes2L=len(mes2)
+            # หาคำที่ซ้ำกัน
             Ames=[]
             if (mes2L==1 or mes1L==1):
                 if (mes1L>=mes2L):
@@ -395,12 +401,12 @@ def similarity():
                     mes2=("*DUPLICATE*").join(mes2)
                     mes2=mes2.split()
                     mes1=" ".join(mes1)
-
     return render_template('similarity.html',form2=form2,input1=input1,input2=input2,mes1=mes1,mes2=mes2,mes1L=mes1L,mes2L=mes2L,Ames=Ames,ratio=ratio)
 
-# matching part
+# Matching mode part
 @app.route('/matching/',methods=["GET","POST"])
 def matching():
+    # ประกาศตัวแปร
     form=myForm()
     message=False
     msl1 = []
@@ -448,6 +454,7 @@ def matching():
     aswordp = 0
     test=False
     if form.validate_on_submit()and form.submit.data:
+        # จัดการข้อความที่รับเข้ามา
         message=form.message.data
         form.message.data=""
         words=message
@@ -461,6 +468,7 @@ def matching():
             words=(words.split(i))
             words=" ".join(words)
         words=words.split()
+        # คำแต่ละคำใน Sublist ต่างๆ
         sl1=["analyse","analysed","analyser","analysers","analyses","analysing","analysis","analyst","analysts","analytic","analytical","analytically","analyze","analyzed","analyzes","analyzing","approach","approachable","approached","approaches","approaching","unapproachable","area","areas","assess","assessable","assessed","assesses","assessing","assessment","assessments","reassess","reassessed","reassessing","reassessment","unassessed","assume","assumed","assumes","assuming","assumption","assumptions","authority","authoritative","authorities","available","availability","unavailable","benefit","beneficial","beneficiary","beneficiaries","benefited","benefiting","benefits","concept","conception","concepts","conceptual","conceptualisation","conceptualise","conceptualised","conceptualises","conceptualising","conceptually","consist","consisted","consistency","consistent","consistently","consisting","consists","inconsistencies","inconsistency","inconsistent","constitute","constituencies","constituency","constituent","constituents","constituted","constitutes","constituting","constitution","constitutions","constitutional","constitutionally","constitutive","unconstitutional","context","contexts","contextual","contextualise","contextualised","contextualising","uncontextualised","contextualize","contextualized","contextualizing","uncontextualized","contract","contracted","contracting","contractor","contractors","contracts","create","created","creates","creating","creation","creations","creative","creatively","creativity","creator","creators","recreate","recreated","recreates","recreating","data","define","definable","defined","defines","defining","definition","definitions","redefine","redefined","redefines","redefining","undefined","derive","derivation","derivations","derivative","derivatives","derived","derives","deriving","distribute","distributed","distributing","distribution","distributional","distributions","distributive","distributor","distributors","redistribute","redistributed","redistributes","redistributing","redistribution","economy","economic","economical","economically","economics","economies","economist","economists","uneconomical","environment","environmental","environmentalist","environmentalists","environmentally","environments","establish","disestablish","disestablished","disestablishes","disestablishing","disestablishment","established","establishes","establishing","establishment","establishments","estimate","estimated","estimates","estimating","estimation","estimations","over-estimate","overestimate","overestimated","overestimates","overestimating","underestimate","underestimated","underestimates","underestimating","evident","evidenced","evidence","evidential","evidently","export","exported","exporter","exporters","exporting","exports","factor","factored","factoring","factors","finance","financed","finances","financial","financially","financier","financiers","financing","formula","formulae","formulas","formulate","formulated","formulating","formulation","formulations","reformulate","reformulated","reformulating","reformulation","reformulations","function","functional","functionally","functioned","functioning","functions","identify","identifiable","identification","identified","identifies","identifying","identities","identity","unidentifiable","income","incomes","indicate","indicated","indicates","indicating","indication","indications","indicative","indicator","indicators","individual","individualised","individuality","individualism","individualist","individualists","individualistic","individually","individuals","interpret","interpretation","interpretations","interpretative","interpreted","interpreting","interpretive","interprets","misinterpret","misinterpretation","misinterpretations","misinterpreted","misinterpreting","misinterprets","reinterpret","reinterpreted","reinterprets","reinterpreting","reinterpretation","reinterpretations","involve","involved","involvement","involves","involving","uninvolved","issue","issued","issues","issuing","labour","labor","labored","labors","laboured","labouring","labours","legal","illegal","illegality","illegally","legality","legally","legislate","legislated","legislates","legislating","legislation","legislative","legislator","legislators","legislature","major","majorities","majority","method","methodical","methodological","methodologies","methodology","methods","occur","occurred","occurrence","occurrences","occurring","occurs","reoccur","reoccurred","reoccurring","reoccurs","percent","percentage","percentages","period","periodic","periodical","periodically","periodicals","periods","policy","policies","principle","principled","principles","unprincipled","proceed","procedural","procedure","procedures","proceeded","proceeding","proceedings","proceeds","process","processed","processes","processing","require","required","requirement","requirements","requires","requiring","research","researched","researcher","researchers","researches","researching","respond","responded","respondent","respondents","responding","responds","response","responses","responsive","responsiveness","unresponsive","role","roles","section","sectioned","sectioning","sections","sector","sectors","significant","insignificant","insignificantly","significance","significantly","signified","signifies","signify","signifying","similar","dissimilar","similarities","similarity","similarl","source","sourced","sources","sourcing","specific","specifically","specification","specifications","specificity","specifics","structure","restructure","restructured","restructures","restructuring","structural","structurally","structured","structures","structuring","unstructured","theory","theoretical","theoretically","theories","theorist","theorists","vary","invariable","invariably","variability","variable","variables","variably","variance","variant","variants","variation","variations","varied","varies","varying"]
         sl2=["achieve","achievable","achieved","achievement","achievements","achieves","achieving","acquire","acquired","acquires","acquiring","acquisition","acquisitions","administrate","administrates","administration","administrations","administrative","administratively","administrator","administrators","affect","affected","affecting","affective","affectively","affects","unaffected","appropriate","appropriacy","appropriately","appropriateness","inappropriacy","inappropriate","inappropriately","aspect","aspects","assist","assistance","assistant","assistants","assisted","assisting","assists","unassisted","category","categories","categorisation","categorise","categorised","categorises","categorising","categorization","categorized","categorizes","categorizing","chapter","chapters","commission","commissioned","commissioner","commissioners","commissioning","commissions","community","communities","complex","complexities","complexity","compute","computation","computational","computations","computable","computer","computed","computerised","computers","computing","conclude","concluded","concludes","concluding","conclusion","conclusions","conclusive","conclusively","inconclusive","inconclusively","conduct","conducted","conducting","conducts","consequent","consequence","consequences","consequently","construct","constructed","constructing","construction","constructions","constructive","constructs","reconstruct","reconstructed","reconstructing","reconstruction","reconstructs","consume","consumed","consumer","consumers","consumes","consuming","consumption","credit","credited","crediting","creditor","creditors","credits","culture","cultural","culturally","cultured","cultures","uncultured","design","designed","designer","designers","designing","designs","distinct","distinction","distinctions","distinctive","distinctively","distinctly","indistinct","indistinctly","element","elements","equate","equated","equates","equating","equation","equations","evaluate","evaluated","evaluates","evaluating","evaluation","evaluations","evaluative","re-evaluate","re-evaluated","re-evaluates","re-evaluating","re-evaluation","feature","featured","features","featuring","final","finalise","finalised","finalises","finalising","finalize","finalized","finalizes","finalizing","finality","finally","finals","focus","focused","focuses","focusing","focussed","focussing","refocus","refocused","refocuses","refocusing","refocussed","refocusses","refocussing","impact","impacted","impacting","impacts","injure","injured","injures","injuries","injuring","injury","uninjured","institute","instituted","institutes","instituting","institution","institutional","institutionalise","institutionalised","institutionalises","institutionalising","institutionalized","institutionalizes","institutionalizing","institutionally","institutions","invest","invested","investing","investment","investments","investor","investors","invests","reinvest","reinvested","reinvesting","reinvestment","reinvests","item","itemisation","itemise","itemised","itemises","itemising","items","journal","journals","maintain","maintained","maintaining","maintains","maintenance","normal","abnormal","abnormally","normalisation","normalise","normalised","normalises","normalising","normalization","normalize","normalized","normalizes","normalizing","normality","normally","obtain","obtainable","obtained","obtaining","obtains","unobtainable","participate","participant","participants","participated","participates","participating","participation","participatory","perceive","perceived","perceives","perceiving","perception","perceptions","positive","positively","potential","potentially","previous","previously","primary","primarily","purchase","purchased","purchaser","purchasers","purchases","purchasing","range","ranged","ranges","ranging","region","regional","regionally","regions","regulate","deregulated","deregulates","deregulating","deregulation","regulated","regulates","regulating","regulation","regulations","regulator","regulators","regulatory","unregulated","relevant","irrelevance","irrelevant","relevance","reside","resided","residence","resident","residential","residents","resides","residing","resource","resourced","resourceful","resources","resourcing","unresourceful","under-resourced","restrict","restricted","restricting","restriction","restrictions","restrictive","restrictively","restricts","unrestricted","unrestrictive","secure","insecure","insecurities","insecurity","secured","securely","secures","securing","securities","security","seek","seeking","seeks","sought","select","selected","selecting","selection","selections","selective","selectively","selector","selectors","selects","site","sites","strategy","strategic","strategies","strategically","strategist","strategists","survey","surveyed","surveying","surveys","text","texts","textual","tradition","nontraditional","traditional","traditionalist","traditionally","traditions","transfer","transferable","transference","transferred","transferring","transfers"]
         sl3=["alternative","alternatively","alternatives","circumstance","circumstances","comment","commentaries","commentary","commentator","commentators","commented","commenting","comments","compensate","compensated","compensates","compensating","compensation","compensations","compensatory","component","componentry","components","consent","consensus","consented","consenting","consents","considerable","considerably","constant","constancy","constantly","constants","inconstancy","inconstantly","constrain","constrained","constraining","constrains","constraint","constraints","unconstrained","contribute","contributed","contributes","contributing","contribution","contributions","contributor","contributors","convene","convention","convenes","convened","convening","conventional","conventionally","conventions","unconventional","coordinate","coordinated","coordinates","coordinating","coordination","coordinator","coordinators","co-ordinate","co-ordinated","co-ordinates","co-ordinating","co-ordination","co-ordinator","co-ordinators","core","cores","coring","cored","corporate","corporates","corporation","corporations","correspond","corresponded","correspondence","corresponding","correspondingly","corresponds","criteria","criterion","deduce","deduced","deduces","deducing","deduction","deductions","demonstrate","demonstrable","demonstrably","demonstrated","demonstrates","demonstrating","demonstration","demonstrations","demonstrative","demonstratively","demonstrator","demonstrators","document","documentation","documented","documenting","documents","dominate","dominance","dominant","dominated","dominates","dominating","domination","emphasis","emphasise","emphasised","emphasising","emphasize","emphasized","emphasizes","emphasizing","emphatic","emphatically","ensure","ensured","ensures","ensuring","exclude","excluded","excludes","excluding","exclusion","exclusionary","exclusionist","exclusions","exclusive","exclusively","framework","frameworks","fund","funded","funder","funders","funding","funds","illustrate","illustrated","illustrates","illustrating","illustration","illustrations","illustrative","immigrate","immigrant","immigrants","immigrated","immigrates","immigrating","immigration","imply","implied","implies","implying","initial","initially","instance","instances","interact","interacted","interacting","interaction","interactions","interactive","interactively","interacts","justify","justifiable","justifiably","justification","justifications","justified","justifies","justifying","unjustified","layer","layered","layering","layers","link","linkage","linkages","linked","linking","links","locate","located","locating","location","locations","relocate","relocated","relocates","relocating","relocation","maximise","max","maximised","maximises","maximising","maximisation","maximize","maximized","maximizes","maximizing","maximization","maximum","minor","minorities","minority","minors","negate","negative","negated","negates","negating","negatively","negatives","outcome","outcomes","partner","partners","partnership","partnerships","philosophy","philosopher","philosophers","philosophical","philosophically","philosophies","philosophise","philosophised","philosophises","philosophising","philosophize","philosophized","philosophizes","philosophizing","physical","physically","proportion","disproportion","disproportionate","disproportionately","proportional","proportionally","proportionate","proportionately","proportions","publish","published","publisher","publishers","publishes","publishing","unpublished","react","reacted","reacts","reacting","reaction","reactionaries","reactionary","reactions","reactive","reactivate","reactivation","reactor","reactors","register","deregister","deregistered","deregistering","deregisters","deregistration","registered","registering","registers","registration","rely","reliability","reliable","reliably","reliance","reliant","relied","relies","relying","unreliable","remove","removable","removal","removals","removed","removes","removing","scheme","schematic","schematically","schemed","schemes","scheming","sequence","sequenced","sequences","sequencing","sequential","sequentially","sex","sexes","sexism","sexual","sexuality","sexually","shift","shifted","shifting","shifts","specify","specifiable","specified","specifies","specifying","unspecified","sufficient","sufficiency","insufficient","insufficiently","sufficiently","task","tasks","technical","technically","technique","techniques","technology","technological","technologically"]
@@ -471,7 +479,7 @@ def matching():
         sl8=["abandon","abandoned","abandoning","abandonment","abandons","accompany","accompanied","accompanies","accompaniment","accompanying","unaccompanied","accumulate","accumulated","accumulating","accumulation","accumulates","ambiguous","ambiguities","ambiguity","unambiguous","unambiguously","append","appendix","appended","appends","appending","appendices","appendixes","appreciate","appreciable","appreciably","appreciated","appreciates","appreciating","appreciation","unappreciated","arbitrary","arbitrariness","arbitrarily","automate","automatic","automated","automates","automating","automatically","automation","bias","biased","biases","biasing","unbiased","chart","charted","charting","charts","uncharted","clarify","clarification","clarified","clarifies","clarifying","clarity","commodity","commodities","complement","complementary","complemented","complementing","complements","conform","conformable","conformability","conformance","conformation","conformed","conforming","conformist","conformists","conformity","conforms","nonconformist","nonconformists","nonconformity","non-conformist","non-conformists","non-conformity","contemporary","contemporaries","contradict","contradicted","contradicting","contradiction","contradictions","contradictory","contradicts","crucial","crucially","currency","currencies","denote","denotation","denotations","denoted","denotes","denoting","detect","detectable","detected","detecting","detection","detective","detectives","detector","detectors","detects","deviate","deviated","deviates","deviating","deviation","deviations","displace","displaced","displacement","displaces","displacing","drama","dramas","dramatic","dramatically","dramatise","dramatised","dramatising","dramatises","dramatisation","dramatisations","dramatist","dramatists","dramatization","dramatizations","dramatize","dramatized","dramatizes","dramatizing","eventual","eventuality","eventually","exhibit","exhibited","exhibiting","exhibition","exhibitions","exhibits","exploit","exploitation","exploited","exploiting","exploits","fluctuate","fluctuated","fluctuates","fluctuating","fluctuation","fluctuations","guideline","guidelines","highlight","highlighted","highlighting","highlights","implicit","implicitly","induce","induced","induces","inducing","induction","inevitable","inevitability","inevitably","infrastructure","infrastructures","inspect","inspected","inspecting","inspection","inspections","inspector","inspectors","inspects","intense","intensely","intenseness","intensification","intensified","intensifies","intensify","intensifying","intension","intensity","intensive","intensively","manipulate","manipulated","manipulates","manipulating","manipulation","manipulations","manipulative","minimise","minimised","minimises","minimising","minimize","minimized","minimizes","minimizing","nuclear","offset","offsets","offsetting","paragraph","paragraphing","paragraphs","plus","pluses","practitioner","practitioners","predominant","predominance","predominantly","predominate","predominated","predominates","predominating","prospect","prospective","prospects","radical","radically","radicals","random","randomly","randomness","reinforce","reinforced","reinforcement","reinforcements","reinforces","reinforcing","restore","restoration","restored","restores","restoring","revise","revised","revises","revising","revision","revisions","schedule","reschedule","rescheduled","reschedules","rescheduling","scheduled","schedules","scheduling","unscheduled","tense","tension","tensely","tenser","tensest","tensions","terminate","terminal","terminals","terminated","terminates","terminating","termination","terminations","theme","themes","thematic","thematically","thereby","uniform","uniformity","uniformly","vehicle","vehicles","via","virtual","virtually","visual","visualise","visualised","visualising","visualisation","visualize","visualized","visualizing","visualization","visually","widespread"]
         sl9=["accommodate","accommodated","accommodates","accommodating","accommodation","analogy","analogies","analogous","anticipate","anticipated","anticipates","anticipating","anticipation","unanticipated","assure","assurance","assurances","assured","assuredly","assures","assuring","attain","attainable","attained","attaining","attainment","attainments","attains","unattainable","behalf","bulk","bulky","cease","ceased","ceaseless","ceases","ceasing","coherent","coherence","coherently","incoherent","incoherently","coincide","coincided","coincides","coinciding","coincidence","coincidences","coincident","coincidental","commence","commenced","commences","commencement","commencing","recommences","recommenced","recommencing","compatible","compatibility","incompatibility","incompatible","concurrent","concurrently","confine","confined","confines","confining","unconfined","controversy","controversies","controversial","controversially","uncontroversial","converse","conversely","device","devices","devote","devoted","devotedly","devotes","devoting","devotion","devotions","diminish","diminished","diminishes","diminishing","diminution","undiminished","distort","distorted","distorting","distortion","distortions","distorts","duration","erode","eroded","erodes","eroding","erosion","ethic","ethical","ethically","ethics","unethical","format","formatted","formatting","formats","found","founded","founder","founders","founding","unfounded","inherent","inherently","insight","insightful","insights","integral","intermediate","manual","manually","manuals","mature","immature","immaturity","maturation","maturational","matured","matures","maturing","maturity","mediate","mediated","mediates","mediating","mediation","medium","military","minimal","minimalisation","minimalise","minimalises","minimalised","minimalising","minimalist","minimalists","minimalistic","minimalization","minimalize","minimalized","minimalizes","minimalizing","minimally","mutual","mutually","norm","norms","overlap","overlapped","overlapping","overlaps","passive","passively","passivity","portion","portions","preliminary","preliminaries","protocol","protocols","qualitative","qualitatively","refine","refined","refinement","refinements","refines","refining","relax","relaxation","relaxed","relaxes","relaxing","restrain","restrained","restraining","restrains","restraint","restraints","unrestrained","revolution","revolutionary","revolutionaries","revolutionise","revolutionised","revolutionises","revolutionising","revolutionist","revolutionists","revolutionize","revolutionized","revolutionizes","revolutionizing","revolutions","rigid","rigidities","rigidity","rigidly","route","routed","routes","routing","scenario","scenarios","sphere","spheres","spherical","spherically","subordinate","subordinates","subordination","supplement","supplementary","supplemented","supplementing","supplements","suspend","suspended","suspending","suspends","suspension","team","teamed","teaming","teams","temporary","temporarily","trigger","triggered","triggering","triggers","unify","unification","unified","unifies","unifying","violate","violated","violates","violating","violation","violations","vision","visions"]
         sl10=["adjacent","albeit","assemble","assembled","assembles","assemblies","assembling","assembly","collapse","collapsed","collapses","collapsible","collapsing","colleague","colleagues","compile","compilation","compilations","compiled","compiles","compiling","conceive","conceivable","conceivably","conceived","conceives","conceiving","inconceivable","inconceivably","convince","convinced","convinces","convincing","convincingly","unconvinced","depress","depressed","depresses","depressing","depression","encounter","encountered","encountering","encounters","enormous","enormity","enormously","forthcoming","incline","inclination","inclinations","inclined","inclines","inclining","integrity","intrinsic","intrinsically","invoke","invoked","invokes","invoking","levy","levies","likewise","nonetheless","notwithstanding","odd","odds","ongoing","panel","panelled","panelling","panels","persist","persisted","persistence","persistent","persistently","persisting","persists","pose","posed","poses","posing","reluctance","reluctant","reluctantly","socalled","straightforward","undergo","undergoes","undergoing","undergone","underwent","whereby"]
-
+        # หาคำที่เหมือนในSublist
         for i in words:
             for j in sl1:
                 if i.lower()==j.lower():
@@ -503,6 +511,7 @@ def matching():
             for j in sl10:
                 if i.lower()==j.lower():
                     msl10.append(i.lower())
+        # ฟังก์ชันนับจำนวนคำและความถี่ของแต่ละคำ
         def word_count(str):
             counts = dict()
             sword=str.split()
@@ -512,6 +521,7 @@ def matching():
                 else:
                     counts[word] = 1
             return counts
+        # นับจำนวนคำและความถี่ของแต่ละคำ
         if msl1 != []:
             Nmsl1=" ".join(msl1)
             Nmsl1=word_count(Nmsl1)
@@ -622,8 +632,11 @@ def matching():
                     if (j==i and check==False):
                         Fmsl10 += int(Nmsl10[i])
                         check= True
+        # จำนวนคำทั้งหมด
         aword=len(aword)
+        # จำนวนคำที่มีใน Sublistทั้งหมด
         asword = Fmsl1+Fmsl2+Fmsl3+Fmsl4+Fmsl5+Fmsl6+Fmsl7+Fmsl8+Fmsl9+Fmsl10
+        # %ของจำนวนคำที่มีใน Sublistเทียบกับทั้งหมด
         aswordp = "{:.4f}".format((asword*100)/aword)
     # test=""
     # test=test.split("“")
