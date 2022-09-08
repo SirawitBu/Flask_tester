@@ -18,6 +18,65 @@
     body{
       font-family: Kanit;
     }
+    .input1{
+      width: 99%;
+      height: 160px;
+      border: 4px solid black;
+      border-radius: 1em;
+      margin-top: 10px;
+      padding-left: 10px;
+      background-color: lightsteelblue;
+      float: left;
+      font-size: 1.5vmax;
+    }
+    .input2{
+      width: 99%;
+      height: 150px;
+      border: 4px solid black;
+      border-radius: 1em;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      background-color: lightsteelblue;
+      float: left;
+      font-size: 1.5vmax;
+    }
+    .show{
+      width: 99%;
+      height: 245px;
+      border: 4px solid black;
+      border-radius: 1em;
+      margin-top: 10px;
+      padding-left: 10px;
+      background-color: lightsteelblue;
+      float: left;
+      font-size: 1.5vmax;
+    }
+    .show div{
+      width: 99%; 
+      height: 70%; 
+      margin-top: 5px; 
+      padding-left: 5px;
+      border: 2px solid black;
+      border-radius: 0.5em;
+      overflow: auto;
+      background-color: whitesmoke;
+      font-size: 2vw;
+    }
+    @media (max-width: 480px) {
+    .input1{
+      font-size: 3.5vmax;
+    }
+    .input2{
+      font-size: 3.5vmax;
+    }
+    .show{
+      font-size: 3.5vmax;
+    }
+    .show div{
+      font-size: 3.5vmax;
+    }
+    }
   </style>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -59,32 +118,33 @@
     </ul>
     
   </div>
-  <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 20px; margin-left: 10px;">
-    
-    <div>
+  <div class=" pt-5 main-content-div" style="padding-left: 1px;margin-top: 10px; margin-left: 10px;">    
         <form action="/similarity/" method="post">
+          <header class="input1">
           {{form2.hidden_tag()}}
-          {{form2.input1.label}}
+          <span style="font-size: 20px;font-weight: bold;">{{form2.input1.label}}</span>
           <br>
           {{form2.input1(placeholder=input1)}}
-          <hr>
-          {{form2.input2.label}}
+          </header>
+          <header class="input2">
+          <span style="font-size: 20px;font-weight: bold;">{{form2.input2.label}}</span>
           <br>
           {{form2.input2(placeholder=input2)}}
           <br>
           {{form2.submit2()}}
+          </header>
         </form>
-    </div>
-    <br>
+    
     {% if input1 and input2 %}
     <!-- {{mes1}} <br> {{mes2}} <br> {{Ames}} <br> {{mes1L}} <br> {{mes2L}} <br>  -->
-      <strong>Show similarity words</strong>
-      <div style="width:500px;height: 200px;"> 
+    <section class="show">
+      <h5>Show similarity words</h5>
+      <div> 
       {% if mes1L==1 or mes2L==1 %}
         {% if mes1L >= mes2L %}
           {% for i in Ames %}
             {% if i=="*DUPLICATE*" %}
-              <span style="background-color: rgb(101, 207, 248)">{{mes2}}</span>
+              <span style="background-color: rgb(101, 207, 248); border-radius: 0.5em;">{{mes2}}</span>
             {% else %}
               <span>{{i}}</span>
             {% endif %}
@@ -117,55 +177,41 @@
           {% endfor %}
         {% endif %}
       {% endif %}
-      <div>Similarity ratio = <strong>{{ratio}}</strong></div>
       </div>
+      <p>Similarity ratio = <strong>{{ratio}}</strong></p>
+
+    </section>
 
 
-    {% elif input1=="" and input2=="" %}
-      <strong>No input1 and input2 !</strong> 
-    {% elif input1==""%}
-      <strong>No input1!</strong> 
-    {% elif input2=="" %}
-      <strong>No input2!</strong> 
     {% endif %}
   </div>
 
 
   <!-- JS แสดงแถบเลือกเมนูเมื่อหน้าจอเล็ก -->
   <script>
-
     function show_side_menu()//function สำหรับแสดง หรือซ่อน side เมนู
     {
         let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
-
         if(left_pos==-200)//ถ้า side เมนูยังไม่แสดง ให้แสดง side เมนู แบบ animation
         {
-
             var menu_animation=setInterval(function(){
-
                 left_pos+=5;
                 document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
-
                 var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
                 left_content+=5;
-
                 document.querySelector(".main-content-div").style.paddingLeft=left_content.toString()+"px";
-
                 
                 if(left_pos==0)
                 {
                     clearInterval(menu_animation);
                 }
-
             },1);
         }
         else
         {   //ถ้า side เมนูยังแสดงอยู่ ให้ซ่อน side เมนู แบบ  animation
             var menu_animation=setInterval(function(){
-
                 left_pos-=5;
                 document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
-
                 var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
                 left_content-=5;
                 
@@ -175,12 +221,10 @@
                 {
                     clearInterval(menu_animation);
                 }
-
             },1);
         }
         
     }
-
     function responsive()//function กำหนดให้ซ่อนปุ่ม เปิดปิด เมนูข้าง หรือแสดงเมนูบน
     {
         if(window.innerWidth <= 768)//หน้าจอน้อยกว่า หรือเท่ากับ 768
@@ -207,27 +251,20 @@
         </li>`;
       });
       document.querySelector(".side_nav_menu").innerHTML=side_menu_html;
-
       responsive();
-
     })();
     // ถ้าหน้าเว็บมีการเปลี่ยนขนาดให้เรียก function responsive() เพื่อ ดูว่าจะซ่อน หรือ แสดงเมนูบน
     window.addEventListener("resize", function(){
-
-        responsive();
-        
+        responsive();        
     });
     //หากมีการคลิกที่เนื้อหาเว็บ แต่ Side เมนูเปิดอยู่ ให้ซ่อน Side เมนู
     document.querySelector("body").addEventListener("click", function(){
-
         let left_pos=parseInt(document.querySelector(".side-menu").style.left.replace("px",""));
         if(left_pos==0)
         {
             var menu_animation=setInterval(function(){
-
                 left_pos-=5;
                 document.querySelector(".side-menu").style.left=left_pos.toString()+"px";
-
                 var left_content=parseInt(document.querySelector(".main-content-div").style.paddingLeft.replace("px",""));
                 left_content-=5;
                 
@@ -237,12 +274,9 @@
                 {
                     clearInterval(menu_animation);
                 }
-
             },1);
-        }
-        
+        }       
     });
-
   </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
