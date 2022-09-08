@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configur
 
 # Count mode part
 class myForm(FlaskForm):
-    message= TextAreaField("Input message",render_kw={'style':'width: 720px;height: 200px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
+    message= TextAreaField("Input message",render_kw={'style':'width: 98%;height: 200px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
     submit= SubmitField("Send",render_kw={'style':''})
 @app.route('/',methods=["GET","POST"])
 def home():
