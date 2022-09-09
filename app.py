@@ -13,7 +13,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configur
 # Count mode part
 class myForm(FlaskForm):
     message= TextAreaField("Input message",render_kw={'style':'width: 98%;height: 200px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
-    submit= SubmitField("Send",render_kw={'style':''})
+    submit= SubmitField("Send",render_kw={'style':'font-size: 20px;border-radius: 0.5em;'})
 @app.route('/',methods=["GET","POST"])
 def home():
     # ประกาศตัวแปร
@@ -330,9 +330,9 @@ def home():
 
 # Similarity mode part
 class dupForm(FlaskForm):
-    input1= TextAreaField("Main message",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
-    input2= TextAreaField("Message to compare",render_kw={'style':'width: 500px;height: 100px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
-    submit2= SubmitField("Send",render_kw={'style':''})
+    input1= TextAreaField("Main message",render_kw={'style':'width: 99%;height: 100px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
+    input2= TextAreaField("Message to compare",render_kw={'style':'width: 99%;height: 50px; overflow: auto; padding:5px 5px 5px 5px;border: 2px solid black;border-radius: 0.5em;'}) 
+    submit2= SubmitField("Send",render_kw={'style':'font-size: 20px;border-radius: 0.5em;'})
 @app.route('/similarity/',methods=["GET","POST"])
 def similarity():
     # ประกาศตัวแปร
