@@ -325,7 +325,10 @@
                     </div>      
                     {% endfor %}
                 </div>
-            {% endif %}            
+            {% endif %}      
+            {% if asword ==0 %} 
+                <strong>..Words not matching...!</strong>
+            {% endif %}     
         </section>
             {% if asword !=0 %}
                 <section class="graph">
