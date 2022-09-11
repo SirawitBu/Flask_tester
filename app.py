@@ -1,6 +1,7 @@
 import os
 from re import search
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template
+
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField,SubmitField
 import spacy
@@ -157,10 +158,10 @@ def home():
                 Nx.append(str(i))
             else:
                 Tag[i]=spacy.explain(i.pos_)
-        Awords=[]
-        for i in Tag:
-            Awords.append(str(i))
-        words = " ".join(Awords)
+        # Awords=[]
+        # for i in Tag:
+        #     Awords.append(str(i))
+        # words = " ".join(Awords)
         # ฟังก์ชันนับจำนวนคำ
         def word_count(str):
             counts = dict()
@@ -354,6 +355,7 @@ def similarity():
         if (input1!="" and input2!=""):
             input1=input1.lower()
             input2=input2.lower()
+            # หา%ความเหมือน
             ratio = SequenceMatcher(a=input1,b=input2)
             ratio = f"{ratio.ratio()}"
             mes1=input1
@@ -452,7 +454,7 @@ def matching():
     aword = 0
     asword = 0
     aswordp = 0
-    test=False
+    # test=False
     if form.validate_on_submit()and form.submit.data:
         # จัดการข้อความที่รับเข้ามา
         message=form.message.data
