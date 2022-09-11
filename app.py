@@ -645,7 +645,7 @@ def matching():
     # test="\"".join(test)
     # test=test.split("”")
     # test=("\"").join(test)
-    return render_template('matching.html',form=form,message=message,test=test,
+    return render_template('matching.html',form=form,message=message,
     msl1=msl1,msl2=msl2,msl3=msl3,msl4=msl4,msl5=msl5,msl6=msl6,msl7=msl7,msl8=msl8,msl9=msl9,msl10=msl10,
     Nmsl1=Nmsl1,Nmsl2=Nmsl2,Nmsl3=Nmsl3,Nmsl4=Nmsl4,Nmsl5=Nmsl5,Nmsl6=Nmsl6,Nmsl7=Nmsl7,Nmsl8=Nmsl8,Nmsl9=Nmsl9,Nmsl10=Nmsl10,
     Nnmsl1=Nnmsl1,Nnmsl2=Nnmsl2,Nnmsl3=Nnmsl3,Nnmsl4=Nnmsl4,Nnmsl5=Nnmsl5,Nnmsl6=Nnmsl6,Nnmsl7=Nnmsl7,Nnmsl8=Nnmsl8,Nnmsl9=Nnmsl9,Nnmsl10=Nnmsl10,
